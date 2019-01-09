@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/report")
+@RequestMapping("/user")
 public class UserController {
 
     @Reference
