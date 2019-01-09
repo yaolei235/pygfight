@@ -16,6 +16,7 @@ import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.Session;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -104,4 +105,14 @@ public class UserServiceImpl implements UserService {
 
         System.out.println("======" + sb.toString());
     }
+    public List<User> findAllUser() {
+        List<User> users = userDao.selectByExample(null);
+        return users;
+    }
+
+    public List<String> findTitle() {
+        List<String> title = userDao.findTitle();
+        return title;
+    }
+
 }

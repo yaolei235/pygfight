@@ -15,4 +15,8 @@ public interface OrderService {
     public void updatePayStatus(String userName);
 
     PageResult findPageBySellerId(Order order, int page, int rows, String sellerId);
+
+    Order findOne(Long id);
+
+    void updateShiping(Order order);
 }
