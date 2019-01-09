@@ -186,6 +186,10 @@
       </if>
     </trim>
   </insert>
+  <!--excel-->
+  <select id="findTitle" resultType="String" parameterType="String">
+    SELECT column_name FROM information_schema.COLUMNS WHERE table_name= 'tb_order_item' AND TABLE_SCHEMA='pinyougou';
+  </select>
   <select id="countByExample" parameterType="cn.itcast.core.pojo.order.OrderItemQuery" resultType="java.lang.Integer" >
     select count(*) from tb_order_item
     <if test="_parameter != null" >

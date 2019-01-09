@@ -280,6 +280,10 @@
       </if>
     </trim>
   </insert>
+  <!--excel-->
+  <select id="findTitle" resultType="String" parameterType="String">
+    SELECT column_name FROM information_schema.COLUMNS WHERE table_name= 'tb_user' AND TABLE_SCHEMA='pinyougou';
+  </select>
   <select id="countByExample" parameterType="cn.itcast.core.pojo.user.UserQuery" resultType="java.lang.Integer" >
     select count(*) from tb_user
     <if test="_parameter != null" >
