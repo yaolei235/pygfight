@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>订单统计</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- 引入angular的js -->
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <!-- 引入分页相关的JS和CSS -->
+    <script type="text/javascript" src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/goodsController.js"></script>
+    <script type="text/javascript" src="../js/service/goodsService.js"></script>
+    <script type="text/javascript" src="../js/service/itemCatService.js"></script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="OrderItemCountController" ng-init="searchEntity={auditStatus:'0'};findItemCatList()">
+<!-- .box-body -->
+
+<div class="box-header with-border">
+    <h3 class="box-title">订单统计</h3>
+</div>
+
+<div class="box-body">
+
+    <!-- 数据表格 -->
+    <div class="table-box">
+
+        <!--工具栏-->
+        <div class="pull-left">
+            <div class="form-group form-inline">
+                <div class="btn-group">
+                    <!--TODO 折线图、饼状图绘制-->
+                    <button type="button" ng-click="" class="btn btn-default" title="销售折线图" ><i class="fa fa-trash-o"></i> 销售折线图</button>
+                    <button type="button" ng-click="" class="btn btn-default" title="销售饼状图" ><i class="fa fa-check"></i> 销售饼状图</button>
+                </div>
+            </div>
+        </div>
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+                商家名称：<input type="text" ng-model="searchEntity.nickName">
+                <button class="btn btn-default" ng-click="reloadList()">查询</button>
+            </div>
+        </div>
+        <!--工具栏/-->
+
+        <!--数据列表-->
+        <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+            <thead>
+            <tr>
+                <th class="" style="padding-right:0px">
+                    <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                </th>
+                <th class="sorting_asc">商家ID</th>
+                <th class="sorting_asc">商家公司</th>
+                <th class="sorting">商家名称</th>
+                <th class="sorting">销售数量</th>
+                <th class="sorting">销售总额</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--TODO 显示商品的详情页-->
+            <tr ng-repeat="entity in list">
+                <td><input ng-click="updateSelection($event,entity.id)" type="checkbox"></td>
+                <!--商家ID-->
+                <td>{{entity.seller.sellerId}}</td>
+                <!--商家公司名-->
+                <td>{{entity.seller.name}}</td>
+                <!--商家店铺名-->
+                <td>{{entity.seller.nickName}}</td>
+                <!--TODO 销售总数量，统计该sellerid下的所有订单商品数量-->
+                <td>{{entity.orderItemList.countNum}}</td>
+                <!--TODO 销售总金额，根据sellerID下的所有订单商品数量计算总金额-->
+                <td>{{entity.orderItemList.totalCount}}</td>
+                <td class="text-center">
+                    <button type="button" class="btn bg-olive btn-xs" >详情</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--数据列表/-->
+
+
+    </div>
+    <!-- 数据表格 /-->
+    <!-- 分页 -->
+    <tm-pagination conf="paginationConf"></tm-pagination>
+
+</div>
+<!-- /.box-body -->
+
+</body>
+
+</html>
