@@ -24,12 +24,12 @@ app.controller("orderController",function($scope,$controller,$http,orderService)
 	$scope.save = function(){
 		// 区分是保存还是修改
 		var object;
-		if($scope.entity.id != null){
+		if($scope.entity.orderId!= null){
 			// 更新
-			object = brandService.update($scope.entity);
+			object = orderService.save($scope.entity);
 		}else{
 			// 保存
-			object = brandService.save($scope.entity);
+			object = orderService.save($scope.entity);
 		}
 		object.success(function(response){
 			// {success:true,message:xxx}
@@ -46,8 +46,9 @@ app.controller("orderController",function($scope,$controller,$http,orderService)
 	}
 	
 	// 查询一个:
-	$scope.findById = function(id){
-        orderService.findById(id).success(function(response){
+	$scope.findOne= function(id){
+        orderService.findOne(id).success(
+        	function(response){
 			// {id:xx,name:yy,firstChar:zz}
 			$scope.entity = response;
 		});
