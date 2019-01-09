@@ -27,6 +27,4 @@ public interface OrderItemDao {
     int updateByPrimaryKeySelective(OrderItem record);
 
     int updateByPrimaryKey(OrderItem record);
-
-    List<String> findTitle();
 }

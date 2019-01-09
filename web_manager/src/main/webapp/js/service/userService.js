@@ -10,6 +10,6 @@ app.service("userService",function($http){
     }
     //导出excel文件请求
     this.getExcel = function(){
-        window.location.href="../report/exportExcel.do";
+        window.location.href="../user/exportExcel.do";
     }
 });

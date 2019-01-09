@@ -12,7 +12,6 @@ public interface UserService {
     public Boolean checkSmsCode(String phone , String smsCode);
 
     public  void  add(User user);
-
     List<User> findAllUser();
     List<String> findTitle();
 }

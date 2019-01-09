@@ -6,6 +6,7 @@ import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.service.UserService;
 import cn.itcast.core.util.ExcelUtil;
 import com.alibaba.dubbo.config.annotation.Reference;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,7 +75,7 @@ public class UserController {
             try {
                 fileName = new String(fileName.getBytes(),"ISO8859-1");
             } catch (UnsupportedEncodingException e) {
-
+                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             response.setContentType("application/octet-stream;charset=ISO8859-1");
