@@ -21,6 +21,7 @@ public class BrandController {
 
     @RequestMapping("/findAll")
     public List<Brand> findAll() {
+        Brand brand = new Brand();
         List<Brand> list = brandService.findAll();
         return list;
     }
