@@ -85,4 +85,13 @@ public class BrandServiceImpl implements BrandService {
         }
 
     }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        for (Long id : ids) {
+            Brand brand = brandDao.selectByPrimaryKey(id);
+            brand.setStatus(status);
+            brandDao.updateByPrimaryKeySelective(brand);
+        }
+    }
 }
