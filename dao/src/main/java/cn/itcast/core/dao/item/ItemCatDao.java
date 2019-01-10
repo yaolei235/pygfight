@@ -31,4 +31,6 @@ public interface ItemCatDao {
     int updateByPrimaryKey(ItemCat record);
 
     List<Map> selectOptionList();
+
+    List<ItemCat> findAll();
 }

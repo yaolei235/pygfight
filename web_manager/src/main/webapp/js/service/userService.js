@@ -12,4 +12,10 @@ app.service("userService",function($http){
     this.getExcel = function(){
         window.location.href="../user/exportExcel.do";
     }
+
+    this.findUsers=function(){
+        return $http.get('../user/findUsers.do');
+    }
+
+
 });

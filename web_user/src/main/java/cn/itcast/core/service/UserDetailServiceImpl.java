@@ -1,5 +1,8 @@
 package cn.itcast.core.service;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,12 +20,19 @@ import java.util.List;
  * 如果能进入到这个实现类, 说明cas已经认证通过, 这里只做赋权操作
  */
 public class UserDetailServiceImpl implements UserDetailsService {
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //定义权限集合
         List<GrantedAuthority> authList = new ArrayList<>();
         //向权限集合中加入访问权限
         authList.add(new SimpleGrantedAuthority("ROLE_USER"));
+
         return new User(username, "", authList);
+
+
     }
+
+
 }

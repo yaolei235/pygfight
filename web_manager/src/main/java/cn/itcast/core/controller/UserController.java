@@ -16,8 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -87,5 +89,11 @@ public class UserController {
         }
     }
 
+
+    @RequestMapping("/findUsers")
+    public Map<String,Integer> findUsers(){
+
+        return userService.findUsers();
+    }
 
 }

@@ -1,5 +1,5 @@
 //服务层
-app.service('itemCatService',function($http){
+app.service('seckillService',function($http){
 	    	
 	//读取列表数据绑定到表单中
 	this.findAll=function(){
@@ -14,8 +14,9 @@ app.service('itemCatService',function($http){
 		return $http.get('../itemCat/findOne.do?id='+id);
 	}
 	//增加 
-	this.add=function(entity){
-		return  $http.post('../itemCat/add.do',entity );
+	this.add=function(ids,entity){
+		alert(entity.title);
+		return  $http.post('../seckill/add.do?ids='+ids,entity );
 	}
 	//修改 
 	this.update=function(entity){

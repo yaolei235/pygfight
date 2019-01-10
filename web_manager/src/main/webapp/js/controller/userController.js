@@ -29,4 +29,15 @@ app.controller("userController",function($scope,$controller,$http,userService){
             }
         });
     }
+
+
+
+
+    $scope.findUsers = function(){
+        userService.findUsers().success(function(response){
+                $scope.list = response;
+
+        });
+    }
+
 });

@@ -2,12 +2,17 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.dao.item.ItemCatDao;
 import cn.itcast.core.dao.template.TypeTemplateDao;
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.item.ItemCatQuery;
 import cn.itcast.core.util.Constants;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -26,6 +31,9 @@ public class ItemCatServiceImpl implements ItemCatService {
 
     @Autowired
     private TypeTemplateDao typeTemplateDao;
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     @Override
     public List<ItemCat> findByParentId(Long parentId) {
@@ -52,7 +60,9 @@ public class ItemCatServiceImpl implements ItemCatService {
 
     @Override
     public List<ItemCat> findAll() {
-        return catDao.selectByExample(null);
+
+        List<ItemCat> itemCatList = catDao.findAll();
+        return itemCatList;
     }
 
     @Override
@@ -69,5 +79,24 @@ public class ItemCatServiceImpl implements ItemCatService {
     public void add(ItemCat itemCat) {
         itemCat.setStatus(0l);
         catDao.insertSelective(itemCat);
+    }
+
+    @Override
+    public void updateStatus(final Long id, String status) {
+        //1. 修改商品状态
+        ItemCat itemCat  = new ItemCat();
+        itemCat.setId(id);
+        itemCat.setStatus(Long.parseLong(status));
+        catDao.updateByPrimaryKeySelective(itemCat);
+    }
+
+
+
+
+    @Override
+    public PageResult findPage(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        Page<ItemCat> page=   (Page<ItemCat>) catDao.selectByExample(null);
+        return new PageResult(page.getTotal(), page.getResult());
     }
 }

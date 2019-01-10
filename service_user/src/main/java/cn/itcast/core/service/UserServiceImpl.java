@@ -54,8 +54,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void sendCode(final String phone) {
 
-
-
         //1. 生成随机6为数字作为验证码
         StringBuffer sb = new StringBuffer();
         for(int i = 1; i< 7; i++) {
@@ -209,5 +207,29 @@ public class UserServiceImpl implements UserService {
         List<String> title=new ArrayList<>();
         return title;
     }*/
+
+    @Override
+    public Map<String, Integer> findUsers() {
+        Map<String, Integer> map = new HashMap<>();
+        List<User> userList = userDao.selectByExample(null);
+        //用户总数量
+        int size = userList.size();
+
+        //活跃用户数量
+        int activeCount;
+        //非活跃用户数量
+        int unactiveCount;
+
+        Map entries = redisTemplate.boundHashOps("logins").entries();
+        for (Object o : entries.keySet()) {
+
+        }
+
+        map.put("totalCount", size);
+        map.put("active", 5);
+        map.put("unactive",12 );
+
+        return map;
+    }
 
 }

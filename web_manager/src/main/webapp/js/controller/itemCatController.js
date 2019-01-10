@@ -10,17 +10,16 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 				$scope.list=response;
 			}			
 		);
-	}    
-	
-	//分页
-	$scope.findPage=function(page,rows){			
-		itemCatService.findPage(page,rows).success(
-			function(response){
-				$scope.list=response.rows;	
-				$scope.paginationConf.totalItems=response.total;//更新总记录数
-			}			
-		);
 	}
+
+    // 分页查询
+    $scope.findByPage = function(page,rows){
+        // 向后台发送请求获取数据:
+        itemCatService.findByPage(page,rows).success(function(response){
+            $scope.paginationConf.totalItems = response.total;
+            $scope.list = response.rows;
+        });
+    }
 	
 	//查询实体 
 	$scope.findOne=function(id){				
@@ -54,7 +53,7 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 	 
 	//批量删除 
 	$scope.dele=function(){			
-		//获取选中的复选框			
+		//获取选中的复选框
 		itemCatService.dele( $scope.selectIds ).success(
 			function(response){
 				if(response.success){
@@ -107,15 +106,65 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		
 		$scope.findByParentId(p_entity.id);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    
+
+
+
+    // 显示状态
+    $scope.status = ["未审核","审核通过","审核未通过","关闭"];
+
+    $scope.itemCatList = [];
+    // 显示分类:
+    $scope.findItemCatList = function(){
+
+        itemCatService.findAll().success(function(response){
+            for(var i=0;i<response.length;i++){
+                $scope.itemCatList[response[i].id] = response[i].name;
+            }
+        });
+    }
+
+    // 审核的方法:
+    $scope.updateStatus = function(status){
+		itemCatService.updateStatus($scope.selectIds,status).success(function(response){
+            if(response.success){
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];
+            }else{
+                alert(response.message);
+            }
+        });
+    }
+
+
+
+
+    $scope.reloadList=function(){
+        //切换页码
+        $scope.findPage( $scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
+    }
+
+    //分页控件配置
+    $scope.paginationConf = {
+        currentPage: 1,
+        totalItems: 10,
+        itemsPerPage: 10,
+        perPageOptions: [10, 20, 30, 40, 50],
+        onChange: function(){
+            $scope.reloadList();//重新加载
+        }
+    };
+
+
+
+    //分页
+    $scope.findPage=function(page,rows){
+        $http.get('../brand/findPage.do?page='+page+'&rows='+rows).success(
+            function(response){
+                $scope.list=response.rows;
+                $scope.paginationConf.totalItems=response.total;//更新总记录数
+            }
+        );
+    }
+
+
 });	

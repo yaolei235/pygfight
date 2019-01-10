@@ -6,9 +6,9 @@ app.service('itemCatService',function($http){
 		return $http.get('../itemCat/findAll.do');		
 	}
 	//分页 
-	this.findPage=function(page,rows){
-		return $http.get('../itemCat/findPage.do?page='+page+'&rows='+rows);
-	}
+    this.findByPage = function(page,rows){
+        return $http.get("../itemCat/findByPage.do?page="+page+"&rows="+rows);
+    }
 	//查询实体
 	this.findOne=function(id){
 		return $http.get('../itemCat/findOne.do?id='+id);
@@ -33,4 +33,10 @@ app.service('itemCatService',function($http){
 	this.findByParentId = function(parentId){
 		return $http.get("../itemCat/findByParentId.do?parentId="+parentId);
 	}
+
+
+    //状态修改
+    this.updateStatus = function(ids,status){
+        return $http.get('../itemCat/updateStatus.do?ids='+ids+"&status="+status);
+    }
 });
