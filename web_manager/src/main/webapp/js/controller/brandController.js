@@ -1,5 +1,5 @@
 // 定义控制器:
-app.controller("brandController",function($scope,$controller,$http,brandService){
+app.controller("brandController",function($scope,$controller,$http,uploadService,brandService){
     // AngularJS中的继承:伪继承
     $controller('baseController',{$scope:$scope});
 
@@ -93,5 +93,28 @@ app.controller("brandController",function($scope,$controller,$http,brandService)
             }
         });
     }
+//文件上传
+    $scope.uploadFile = function(){
+        // 调用uploadService的方法完成文件的上传
+        uploadService.uploadFile().success(function(response){
+            if(response.success){
+                $scope.excel_entity = response.message;
+                // 获得url
+                alert(" 上传成功,请点击保存!");
+            }else{
+                alert(response.message);
+            }
+        });
+    }
+    $scope.add_excel_entity=function (excel_entity) {
 
+        brandService.addExcel($scope.excel_entity).success(function (response) {
+           if(response.success){
+               $scope.reloadList();
+           }else {
+               alert(response.message);
+           }
+        });
+
+    }
 });

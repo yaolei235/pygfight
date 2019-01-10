@@ -16,8 +16,8 @@ app.service("orderService",function($http){
 		return $http.post("../order/update.do",entity);
 	}
 	
-	this.findOne=function(orderId){
-		return $http.get("../order/findById.do?orderId="+orderId);
+	this.findOne=function(id){
+		return $http.get("../order/findOne.do?orderId="+id);
 	}
 	this.dele = function(ids){
 		return $http.get("../order/delete.do?ids="+ids);

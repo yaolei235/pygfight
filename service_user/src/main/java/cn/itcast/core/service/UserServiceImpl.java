@@ -1,6 +1,13 @@
 package cn.itcast.core.service;
 
+
+import cn.itcast.core.dao.order.OrderDao;
+import cn.itcast.core.dao.order.OrderItemDao;
 import cn.itcast.core.dao.user.UserDao;
+import cn.itcast.core.pojo.order.Order;
+import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderItemQuery;
+import cn.itcast.core.pojo.order.OrderQuery;
 import cn.itcast.core.pojo.user.User;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -15,10 +22,7 @@ import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.Session;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -43,6 +47,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private OrderItemDao orderItemDao;
+    @Autowired
+    private OrderDao orderDao;
     @Override
     public void sendCode(final String phone) {
 
@@ -105,15 +113,100 @@ public class UserServiceImpl implements UserService {
 
         System.out.println("======" + sb.toString());
     }
-    public List<User> findAllUser() {
+    //查询用户及商品订单信息
+    public List<ArrayList<String>> findAllUser() {
         List<User> users = userDao.selectByExample(null);
-        return users;
-    }
+        List<ArrayList<String>> lists=new ArrayList<>();
 
-    public List<String> findTitle() {
-        List<String> title = userDao.findTitle();
-        return title;
+        for (User user : users) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add(user.getId()+"");
+            list.add(user.getUsername());
+            list.add(user.getPhone());
+            //查询订单表
+            OrderQuery orderQuery = new OrderQuery();
+            OrderQuery.Criteria criteria1 = orderQuery.createCriteria();
+            criteria1.andUserIdEqualTo(user.getUsername());
+            List<Order> orders = orderDao.selectByExample(orderQuery);
+            if (orders.size() > 0) {
+                for (Order order : orders) {
+                    ArrayList<String> list1 = new ArrayList<>(list);
+                    list1.add(order.getReceiverAreaName());
+                    list1.add(order.getReceiver());
+                    list1.add(order.getOrderId()+"");
+                    OrderItemQuery query = new OrderItemQuery();
+                    OrderItemQuery.Criteria criteria = query.createCriteria();
+                    criteria.andOrderIdEqualTo(order.getOrderId());
+                    List<OrderItem> orderItems = orderItemDao.selectByExample(query);
+                    if (orderItems.size()>0){
+                        for (OrderItem orderItem : orderItems) {
+                            ArrayList<String> orderItemList = new ArrayList<>(list1);
+                            orderItemList.add(orderItem.getTitle());
+                            orderItemList.add(orderItem.getSellerId());
+                            orderItemList.add(orderItem.getNum()+"");
+                            orderItemList.add(orderItem.getTotalFee()+"");
+                            orderItemList.add(getStatus(order));
+                            orderItemList.add(getPayment(order));
+                            lists.add(orderItemList);
+
+                        }
+                    }else{
+                        list1.add("无");
+                        list1.add("无");
+                        list1.add("无");
+                        list1.add("无");
+                        list1.add(getStatus(order));
+                        list1.add(getPayment(order));
+                        lists.add(list1);
+                    }
+
+
+                }
+            }else {
+                lists.add(list);
+            }
+
+
+        }
+        return lists;
     }
+    //获取支付状态
+    private String getStatus(Order order){
+        //订单状态  状态：1、未付款，2、已付款，3、未发货，4、已发货，5、交易成功，6、交易关闭,7、待评价
+        if ("1".equals(order.getStatus())){
+            return "未付款";
+        }else if ("2".equals(order.getStatus())){
+            return "已付款";
+        }else if ("3".equals(order.getStatus())){
+            return "未发货";
+        }else if ("4".equals(order.getStatus())){
+            return "已发货";
+        }else if ("5".equals(order.getStatus())){
+            return "交易成功";
+        }else if ("6".equals(order.getStatus())){
+            return "未付款";
+        }else if ("7".equals(order.getStatus())){
+            return "待评价";
+        }else {
+            return "订单状态无效";
+        }
+    }
+    /**
+     * 支付类型，1、在线支付，2、货到付款
+     */
+    private String getPayment(Order order){
+        if ("1".equals(order.getPaymentType())){
+            return "在线支付";
+        }else {
+            return "货到付款";
+        }
+    }
+//查询sql列名
+    /*public List<String> findTitle() {
+        List<String> title1 = userDao.findTitle();
+        List<String> title=new ArrayList<>();
+        return title;
+    }*/
 
     @Override
     public Map<String, Integer> findUsers() {

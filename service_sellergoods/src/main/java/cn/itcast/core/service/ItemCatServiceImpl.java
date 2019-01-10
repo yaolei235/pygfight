@@ -1,6 +1,7 @@
 package cn.itcast.core.service;
 
 import cn.itcast.core.dao.item.ItemCatDao;
+import cn.itcast.core.dao.template.TypeTemplateDao;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.item.ItemCatQuery;
 import cn.itcast.core.util.Constants;
@@ -10,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -20,6 +22,10 @@ public class ItemCatServiceImpl implements ItemCatService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+
+    @Autowired
+    private TypeTemplateDao typeTemplateDao;
 
     @Override
     public List<ItemCat> findByParentId(Long parentId) {
@@ -47,5 +53,21 @@ public class ItemCatServiceImpl implements ItemCatService {
     @Override
     public List<ItemCat> findAll() {
         return catDao.selectByExample(null);
+    }
+
+    @Override
+    public List<Map> selectOptionList() {
+      return   catDao.selectOptionList();
+    }
+
+    @Override
+    public List<Map> selectTypeList() {
+        return typeTemplateDao.selectOptionList();
+    }
+
+    @Override
+    public void add(ItemCat itemCat) {
+        itemCat.setStatus(0l);
+        catDao.insertSelective(itemCat);
     }
 }

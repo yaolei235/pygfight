@@ -1,8 +1,8 @@
 package cn.itcast.core.service;
 
-import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.user.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +13,12 @@ public interface UserService {
     public Boolean checkSmsCode(String phone , String smsCode);
 
     public  void  add(User user);
-    List<User> findAllUser();
-    List<String> findTitle();
+
+
 
     Map<String,Integer> findUsers();
+
+    List<ArrayList<String>> findAllUser();
+
+
 }
