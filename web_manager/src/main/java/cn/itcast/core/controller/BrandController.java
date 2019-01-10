@@ -113,4 +113,18 @@ public class BrandController {
         List<Map> list = brandService.selectOptionList();
         return list;
     }
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status){
+        try {
+            if (ids!=null){
+                brandService.updateStatus(ids,status);
+            }
+            return new Result(true, "审核通过!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "审核失败!");
+
+        }
+    }
+
 }

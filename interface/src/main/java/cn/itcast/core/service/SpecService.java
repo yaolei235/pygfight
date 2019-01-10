@@ -7,7 +7,7 @@ import cn.itcast.core.pojo.specification.Specification;
 import java.util.List;
 import java.util.Map;
 
-public interface SpecService {
+public interface SpecService{
 
     public PageResult findPage(Specification spec, Integer page, Integer rows);
 

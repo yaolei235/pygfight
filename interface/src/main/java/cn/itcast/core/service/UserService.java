@@ -4,6 +4,7 @@ import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.user.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -14,4 +15,6 @@ public interface UserService {
     public  void  add(User user);
     List<User> findAllUser();
     List<String> findTitle();
+
+    Map<String,Integer> findUsers();
 }

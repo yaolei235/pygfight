@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -86,4 +88,12 @@ public class UserController {
             ex.printStackTrace();
         }
     }
+
+
+    @RequestMapping("/findUsers")
+    public Map<String,Integer> findUsers(){
+
+        return userService.findUsers();
+    }
+
 }

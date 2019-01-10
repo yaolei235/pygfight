@@ -42,9 +42,10 @@ public class BrandController {
      * @param brand
      * @return
      */
-    @RequestMapping("/add")
+    @RequestMapping("/save")
     public Result add(@RequestBody  Brand brand) {
         try {
+            brand.setStatus("0");
             brandService.add(brand);
             return new Result(true, "添加成功!");
         } catch (Exception e) {

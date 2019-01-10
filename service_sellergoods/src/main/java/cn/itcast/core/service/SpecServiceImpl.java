@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Service
 @Transactional
-public class SpecServiceImpl implements SpecificationService {
+public class SpecServiceImpl implements SpecService {
 
     @Autowired
     private SpecificationDao specDao;
