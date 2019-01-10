@@ -1,13 +1,11 @@
 package cn.itcast.core.util;
 
 
-import cn.itcast.core.pojo.user.User;
+
 import org.apache.poi.hssf.usermodel.*;
-
-
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 
 public class ExcelUtil {
 
@@ -15,11 +13,11 @@ public class ExcelUtil {
      * 导出Excel
      * @param sheetName sheet名称
      * @param title 标题
-     * @param users 内容
+     * @param lists 内容
      * @param wb HSSFWorkbook对象
      * @return
      */
-    public static HSSFWorkbook getHSSFWorkbook(String sheetName, Object [] title, List<User> users, HSSFWorkbook wb){
+    public static HSSFWorkbook getHSSFWorkbook(String sheetName, Object [] title, List<ArrayList<String>> lists, HSSFWorkbook wb){
 
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
         if(wb == null){
@@ -39,23 +37,21 @@ public class ExcelUtil {
         //声明列对象
         HSSFCell cell = null;
 
-        //创建标题
+        //创建标题  用户id	用户名	用户手机号	收货人地区名称	收货人	用户订单号	 商品	数量 订单总价	  	 支付状态
         for(int i=0;i<title.length;i++){
             cell = row.createCell(i);
             cell.setCellValue(title[i]+"");
             cell.setCellStyle(style);
         }
-        Map<String,Object> map=new HashMap<String,Object>();
-        for (int i = 0; i < users.size(); i++) {
-            row = sheet.createRow(i + 1);
-            User user= users.get(i);
-            map= UserToMapUtil.convert2Map(user);
-            //System.out.println(map);
-            for (int j = 0; j < title.length; j++) {
-                String value=title[j]+"";
-                String s = value.replaceAll("_", "");
-                row.createCell(j).setCellValue(map.get(s)+"");
-
+        /**
+         * list集合
+         */
+        for (int i = 0; i < lists.size(); i++) {
+            row = sheet.createRow(i+1);
+            ArrayList<String> list = lists.get(i);
+            for (int j = 0; j < list.size(); j++) {
+                String s = list.get(j);
+                row.createCell(j).setCellValue(s);
             }
         }
 

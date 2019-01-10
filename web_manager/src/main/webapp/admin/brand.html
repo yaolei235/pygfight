@@ -15,13 +15,14 @@
 	<!-- 引入angular的js -->
 	<script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
 	<!-- 引入分页相关的JS和CSS -->
-	<script type="text/javascript" src="../plugins/angularjs/pagination.js"></script>
+	<script src="../plugins/angularjs/pagination.js"></script>
 	<link rel="stylesheet" href="../plugins/angularjs/pagination.css">
 
 	<script type="text/javascript" src="../js/base_pagination.js"></script>
 	<script type="text/javascript" src="../js/controller/baseController.js"></script>
 	<script type="text/javascript" src="../js/controller/brandController.js"></script>
 	<script type="text/javascript" src="../js/service/brandService.js"></script>
+	<script type="text/javascript" src="../js/service/uploadService.js"></script>
 </head>
 <body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="brandController">
 <!-- .box-body -->
@@ -39,9 +40,7 @@
 			<div class="form-group form-inline">
 				<div class="btn-group">
 					<button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" ng-click="entity={}"><i class="fa fa-file-o"></i> 新建</button>
-					<button type="button" class="btn btn-default" title="审核通过"  ng-click="updateStatus('1')"><i class="fa fa-file-o"></i> 审核通过</button>
-					<button type="button" ng-click="updateStatus('2')" class="btn btn-default" title="驳回" ><i class="fa fa-ban"></i> 驳回</button>
-
+					<button type="button"  class="btn btn-default" title="导入" data-target="#uploadModal"  data-toggle="modal"  ><i class="fa fa-file-o"></i>导入</button>
 					<button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i class="fa fa-trash-o"></i> 删除</button>
 					<button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
 				</div>
@@ -49,7 +48,9 @@
 		</div>
 		<div class="box-tools pull-right">
 			<div class="has-feedback">
-				品牌名称:<input type="text" ng-model="searchEntity.name"> 品牌首字母:<input type="text" ng-model="searchEntity.firstChar"> <input class="btn btn-default" ng-click="reloadList()" type="button" value="查询">
+				品牌名称:<input type="text" ng-model="searchEntity.name"> 品牌首字母:<input type="text"
+																				   ng-model="searchEntity.firstChar">
+				<input class="btn btn-default" ng-click="reloadList()" type="button" value="查询">
 			</div>
 		</div>
 		<!--工具栏/-->
@@ -64,7 +65,6 @@
 				<th class="sorting_asc">品牌ID</th>
 				<th class="sorting">品牌名称</th>
 				<th class="sorting">品牌首字母</th>
-				<th class="sorting">审核状态</th>
 				<th class="text-center">操作</th>
 			</tr>
 			</thead>
@@ -74,7 +74,6 @@
 				<td>{{entity.id}}</td>
 				<td>{{entity.name}}</td>
 				<td>{{entity.firstChar}}</td>
-				<td>{{entity.status}}</td>
 				<td class="text-center">
 					<button type="button" class="btn bg-olive btn-xs" ng-click="findById(entity.id)" data-toggle="modal" data-target="#editModal"  >修改</button>
 				</td>
@@ -91,7 +90,7 @@
 	<tm-pagination conf="paginationConf"></tm-pagination>
 
 </div>
-{{selectIds}}
+要删除的选项:{{selectIds}}
 <!-- /.box-body -->
 
 <!-- 编辑窗口 -->
@@ -121,6 +120,49 @@
 		</div>
 	</div>
 </div>
+<!-- 上传窗口 -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" >
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 id="myModalLabel">上传文件</h3>
+			</div>
+			<div class="modal-body">
 
+				<table class="table table-bordered table-striped">
+
+					<tr>
+						<td>文件</td>
+						<td>
+							<table>
+								<tr>
+									<td>
+										<input type="file" id="file" />
+										<button class="btn btn-primary" type="button" ng-click="uploadFile()">
+											上传
+										</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										{{excel_entity}}
+									</td>
+								</tr>
+
+							</table>
+						</td>
+					</tr>
+				</table>
+
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-success"  data-dismiss="modal" ng-click="add_excel_entity(excel_entity)" aria-hidden="true">保存</button>
+				<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+
+		</div>
+	</div>
+</div>
 </body>
 </html>

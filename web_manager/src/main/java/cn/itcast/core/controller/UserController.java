@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,17 +37,16 @@ public class UserController {
         //获取数据
 
         //excel标题
-        List<String> list =userService.findTitle();
-        Object [] title =list.toArray();
+        Object[] title={"用户id","用户名","用户手机号","收货人地区名称",
+                "收货人","用户订单号","商品","商家","数量","订单总价","支付状态","支付方式"};
         //excel文件名
         String fileName = "用户表"+ System.currentTimeMillis() + ".xls";
 
         //sheet名  表名
         String sheetName = "用户表";
         //users数据
-        List<User> allUser = userService.findAllUser();
-        //创建HSSFWorkbook
-        HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(sheetName, title, allUser, null);
+        List<ArrayList<String>> lists = userService.findAllUser();//创建HSSFWorkbook
+        HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(sheetName, title, lists, null);
         //获取项目路径
 
         OutputStream outputStream=null;
@@ -86,4 +86,6 @@ public class UserController {
             ex.printStackTrace();
         }
     }
+
+
 }

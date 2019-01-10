@@ -2,6 +2,7 @@ package cn.itcast.core.controller;
 
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
+import cn.itcast.core.pojo.entity.ShopOrder;
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.service.OrderService;
@@ -25,19 +26,18 @@ public class OrderController {
         //通过springsecurity获得到登录商家的ID
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         PageResult pageResult = orderService.findPageBySellerId(order, page, rows, sellerId);
-        List<Order> orderList = pageResult.getRows();
         return pageResult;
     }
 
     @RequestMapping("/findOne")
-    public Order findOne(Long id) {
-        Order one = orderService.findOne(id);
+    public ShopOrder findOne(Long orderId) {
+        ShopOrder one = orderService.findOne(orderId);
         return one;
     }
 
     @RequestMapping("/save")
     public Result save(@RequestBody Order order) {
-        System.out.println(order.getShippingName());
+        System.out.println(order.getOrderId());
         try {
             orderService.updateShiping(order);
             return new Result(true, "修改成功");
