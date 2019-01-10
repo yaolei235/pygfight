@@ -28,5 +28,4 @@ public interface UserDao {
 
     int updateByPrimaryKey(User record);
 
-    List<String> findTitle();
 }

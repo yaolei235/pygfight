@@ -29,4 +29,10 @@ public class ItemCatController {
         List<ItemCat> list = catService.findByParentId(parentId);
         return list;
     }
+
+    @RequestMapping({"/findAll"})
+    public List<ItemCat> findAll() {
+        List<ItemCat> itemCatList = this.catService.findAll();
+        return itemCatList;
+    }
 }
