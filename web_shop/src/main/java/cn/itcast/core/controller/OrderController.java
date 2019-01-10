@@ -1,6 +1,8 @@
 package cn.itcast.core.controller;
 
 import cn.itcast.core.pojo.entity.PageResult;
+import cn.itcast.core.pojo.entity.Result;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.service.OrderService;
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -27,4 +29,21 @@ public class OrderController {
         return pageResult;
     }
 
+    @RequestMapping("/findOne")
+    public Order findOne(Long id) {
+        Order one = orderService.findOne(id);
+        return one;
+    }
+
+    @RequestMapping("/save")
+    public Result save(@RequestBody Order order) {
+        System.out.println(order.getShippingName());
+        try {
+            orderService.updateShiping(order);
+            return new Result(true, "修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "修改失败");
+        }
+    }
 }

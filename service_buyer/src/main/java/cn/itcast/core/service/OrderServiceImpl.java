@@ -164,4 +164,15 @@ public class OrderServiceImpl implements OrderService {
         Page<Order> pageR = (Page<Order>)orderDao.selectByExample(orderQuery);
         return new PageResult(pageR.getTotal(), pageR.getResult());
     }
+
+    @Override
+    public Order findOne(Long id) {
+        Order order = orderDao.selectByPrimaryKey(id);
+        return order;
+    }
+
+    @Override
+    public void updateShiping(Order order) {
+        orderDao.updateByPrimaryKeySelective(order);
+    }
 }

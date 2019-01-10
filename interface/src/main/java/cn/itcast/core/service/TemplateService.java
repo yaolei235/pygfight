@@ -19,4 +19,13 @@ public interface TemplateService {
     public void delete(Long[] ids);
 
     public List<Map> findBySpecList(Long id);
+
+    void updateStatus(Long[] ids, String status);
+
+    //查询
+    public PageResult search(TypeTemplate typeTemplate, Integer page, Integer rows);
+
+
+
+
 }

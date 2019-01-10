@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Service
 @Transactional
-public class SpecServiceImpl implements SpecService {
+public class SpecServiceImpl implements SpecificationService {
 
     @Autowired
     private SpecificationDao specDao;
@@ -115,5 +115,21 @@ public class SpecServiceImpl implements SpecService {
     @Override
     public List<Map> selectOptionList() {
         return specDao.selectOptionList();
+    }
+
+    //审核规格的方法 其实也是修改update
+    // TODO 检查一下
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        //审核规格,只有status改变 其他的不变
+        for (Long id : ids) {
+            Specification specification = specDao.selectByPrimaryKey(id);
+
+            specification.setStatus(status);
+
+            specDao.updateByPrimaryKeySelective(specification);
+
+        }
+
     }
 }
