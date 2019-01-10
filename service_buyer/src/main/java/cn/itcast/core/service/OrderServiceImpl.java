@@ -5,6 +5,7 @@ import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
 import cn.itcast.core.pojo.entity.BuyerCart;
 import cn.itcast.core.pojo.entity.PageResult;
+import cn.itcast.core.pojo.entity.ShopOrder;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
@@ -26,7 +27,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class OrderServiceImpl implements OrderService {
+public class  OrderServiceImpl implements OrderService {
 
     @Autowired
     private PayLogDao payLogDao;
@@ -161,18 +162,35 @@ public class OrderServiceImpl implements OrderService {
         if (order.getOrderId() != null && !"".equals(order.getOrderId())) {
             criteria.andOrderIdEqualTo(order.getOrderId());
         }
-        Page<Order> pageR = (Page<Order>)orderDao.selectByExample(orderQuery);
-        return new PageResult(pageR.getTotal(), pageR.getResult());
+        Page<Order> pageR = (Page<Order>) orderDao.selectByExample(orderQuery);
+        List<ShopOrder> shopOrderList = new ArrayList<>();
+        for (Order before : pageR.getResult()) {
+            ShopOrder shopOrder = new ShopOrder();
+            shopOrder.setOrderId(String.valueOf(before.getOrderId()));
+            shopOrder.setUserId(before.getUserId());
+            shopOrder.setStatus(before.getStatus());
+            shopOrder.setCreateTime(before.getCreateTime());
+            shopOrderList.add(shopOrder);
+        }
+        return new PageResult(pageR.getTotal(), shopOrderList);
     }
 
     @Override
-    public Order findOne(Long id) {
+    public ShopOrder findOne(Long id) {
         Order order = orderDao.selectByPrimaryKey(id);
-        return order;
+        ShopOrder shopOrder = new ShopOrder();
+        shopOrder.setOrderId(String.valueOf(order.getOrderId()));
+        shopOrder.setUserId(order.getUserId());
+        shopOrder.setStatus(order.getStatus());
+        shopOrder.setCreateTime(order.getCreateTime());
+        return shopOrder;
     }
 
     @Override
     public void updateShiping(Order order) {
+        System.out.println(order.getShippingName());
+        System.out.println(order.getShippingCode());
+        System.out.println(order.getOrderId());
         orderDao.updateByPrimaryKeySelective(order);
     }
 }
