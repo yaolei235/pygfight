@@ -1,5 +1,7 @@
 package cn.itcast.core.controller;
 
+import cn.itcast.core.pojo.entity.PageResult;
+import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.service.ItemCatService;
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -32,7 +34,31 @@ public class ItemCatController {
 
     @RequestMapping({"/findAll"})
     public List<ItemCat> findAll() {
-        List<ItemCat> itemCatList = this.catService.findAll();
+        List<ItemCat> itemCatList = catService.findAll();
         return itemCatList;
     }
+
+
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(long[] ids,String status){
+        try {
+            if (ids != null) {
+                for (Long id : ids) {
+                    catService.updateStatus(id, status);
+                }
+            }
+            return new Result(true, "状态修改成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "修改失败!");
+        }
+    }
+
+
+
+    @RequestMapping("/findPage")
+    public PageResult  findPage(Integer page, Integer rows){
+        return catService.findPage(page, rows);
+    }
+
 }
