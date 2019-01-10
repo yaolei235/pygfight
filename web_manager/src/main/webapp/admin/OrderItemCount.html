@@ -23,12 +23,12 @@
 
     <script type="text/javascript" src="../js/base_pagination.js"></script>
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
-    <script type="text/javascript" src="../js/controller/goodsController.js"></script>
-    <script type="text/javascript" src="../js/service/goodsService.js"></script>
+    <script type="text/javascript" src="../js/controller/orderSellerCountController.js"></script>
+    <script type="text/javascript" src="../js/service/orderSellerCountService.js"></script>
     <script type="text/javascript" src="../js/service/itemCatService.js"></script>
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="OrderItemCountController" ng-init="searchEntity={auditStatus:'0'};findItemCatList()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="orderSellerCountController" ng-init="searchEntity={auditStatus:'0'};findItemCatList()">
 <!-- .box-body -->
 
 <div class="box-header with-border">
@@ -84,9 +84,9 @@
                 <!--商家店铺名-->
                 <td>{{entity.seller.nickName}}</td>
                 <!--TODO 销售总数量，统计该sellerid下的所有订单商品数量-->
-                <td>{{entity.orderItemList.countNum}}</td>
+                <td>{{entity.countNum}}</td>
                 <!--TODO 销售总金额，根据sellerID下的所有订单商品数量计算总金额-->
-                <td>{{entity.orderItemList.totalCount}}</td>
+                <td>{{entity.totalCount}}</td>
                 <td class="text-center">
                     <button type="button" class="btn bg-olive btn-xs" >详情</button>
                 </td>
