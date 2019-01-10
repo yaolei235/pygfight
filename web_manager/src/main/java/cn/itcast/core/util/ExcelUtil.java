@@ -2,7 +2,18 @@ package cn.itcast.core.util;
 
 
 
+import cn.itcast.core.pojo.user.User;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,5 +67,54 @@ public class ExcelUtil {
         }
 
         return wb;
+    }
+
+    //导人excel表
+    public static <T> List<T> readExcel(T t,String fileName,List<String> title) throws Exception{
+
+
+        InputStream is = new FileInputStream(new File(fileName));
+        Workbook hssfWorkbook = null;
+        if (fileName.endsWith("xlsx")){
+            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
+        }else if (fileName.endsWith("xls")){
+            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
+
+        }
+
+        List<T> list = new ArrayList<T>();
+        // 循环工作表Sheet   从1开始,因为一般第一行都是列名
+        for (int numSheet = 1; numSheet <hssfWorkbook.getNumberOfSheets(); numSheet++) {
+            Class<?> aClass = t.getClass();
+            Method[] methods = aClass.getMethods();
+            //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            Sheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            if (hssfSheet == null) {
+                continue;
+            }
+            // 循环行Row
+            for (int i = 0; i < title.size(); i++) {
+                String s = title.get(0);
+                String ss = "set"+s.replaceAll("-", "");
+                Row hssfRow = hssfSheet.getRow(i+1);
+                if (hssfRow != null) {
+
+                    for (Method method : methods) {
+                        String method1 = method + "";
+                        String[] split = method1.split("\\(");
+                        String[] split1 = split[0].split("/.");
+                        method1 = split1[split1.length - 1].toLowerCase();
+                        if (ss.equals(method1)) {
+                            method.invoke(t,hssfRow.getCell(i));
+                            break;
+                        }
+                    }
+                }
+            }
+            list.add(t);
+
+        }
+
+        return list;
     }
 }

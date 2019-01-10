@@ -4,6 +4,7 @@ import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.service.BrandService;
+import cn.itcast.core.util.ExcelUtil;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -112,5 +113,20 @@ public class BrandController {
     public List<Map> selectOptionList(){
         List<Map> list = brandService.selectOptionList();
         return list;
+    }
+
+    @RequestMapping("/updateBrand")
+    public Result updateBrand(String excelUrl){
+
+        List<String> title = brandService.findTitle();
+        System.out.println(excelUrl);
+        try {
+            List<Brand> brands = ExcelUtil.readExcel(new Brand(), excelUrl, title);
+            System.out.println(brands);
+            brandService.addBrands(brands);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Result(true,"保存成功");
     }
 }

@@ -73,6 +73,9 @@
       ${fields}
     </if>
   </sql>
+  <select id="findTitle" resultType="String" parameterType="String">
+    SELECT column_name FROM information_schema.COLUMNS WHERE table_name = #{tableName} AND TABLE_SCHEMA = #{mysqlName};
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.itcast.core.pojo.good.BrandQuery" >
     select
     <if test="distinct" >

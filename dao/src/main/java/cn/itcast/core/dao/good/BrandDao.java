@@ -32,4 +32,6 @@ public interface BrandDao {
     int updateByPrimaryKeySelective(Brand record);
 
     int updateByPrimaryKey(Brand record);
+
+    List<String> findTitle(@Param("tableName")String tableName,@Param("mysqlName")String mysqlName);
 }

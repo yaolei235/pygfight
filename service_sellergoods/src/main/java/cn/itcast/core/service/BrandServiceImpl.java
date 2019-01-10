@@ -4,6 +4,7 @@ import cn.itcast.core.dao.good.BrandDao;
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.good.BrandQuery;
+import cn.itcast.core.util.MysqlNameUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -92,6 +93,30 @@ public class BrandServiceImpl implements BrandService {
             Brand brand = brandDao.selectByPrimaryKey(id);
             brand.setStatus(status);
             brandDao.updateByPrimaryKeySelective(brand);
+        }
+    }
+
+    @Override
+    public List<String> findTitle() {
+        return brandDao.findTitle(MysqlNameUtil.TABLE_BRAND, MysqlNameUtil.MYSQL_NAME);
+    }
+
+    @Override
+    public void addBrands(List<Brand> brands) {
+        List<Brand> brandList = brandDao.selectByExample(null);
+        for (Brand brand : brands) {
+            for (Brand brand1 : brandList) {
+                if (brand.getId().equals(brand1.getId())){
+                    brandDao.updateByPrimaryKey(brand);
+                    brands.remove(brand);
+                    return;
+                }
+            }
+        }
+        if (brands.size()>0){
+            for (Brand brand : brands) {
+                brandDao.insertSelective(brand);
+            }
         }
     }
 }
