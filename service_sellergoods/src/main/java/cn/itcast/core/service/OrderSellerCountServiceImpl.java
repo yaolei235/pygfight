@@ -7,8 +7,6 @@ import cn.itcast.core.pojo.order.OrderItem;
 import cn.itcast.core.pojo.order.OrderItemQuery;
 import cn.itcast.core.pojo.seller.Seller;
 import com.alibaba.dubbo.config.annotation.Service;
-import jdk.internal.jline.internal.TestAccessible;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +14,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sun.tools.internal.xjc.reader.Ring.add;
-
 @Service
 @Transactional
-public class OrderItemCountServiceImpl implements OrderSellerCountService {
+public class OrderSellerCountServiceImpl implements OrderSellerCountService {
 
     @Autowired
     private SellerDao sellerDao;
@@ -33,26 +29,25 @@ public class OrderItemCountServiceImpl implements OrderSellerCountService {
     @Override
     public List<OrderSellerCountEntity> findAll() {
         //创建订单统计对象
-        List<OrderSellerCountEntity> orderItemCountEntitys = new ArrayList<>();
+        List<OrderSellerCountEntity> orderSellerCountEntitys = new ArrayList<>();
         //查询出所有的商家列表
         List<Seller> sellers = sellerDao.selectByExample(null);
         //创建查询对象
         OrderItemQuery query = new OrderItemQuery();
         OrderItemQuery.Criteria criteria = query.createCriteria();
-
-        for (OrderSellerCountEntity orderItemCountEntity : orderItemCountEntitys) {
             //遍历商家,将对应商家的订单集合统计出来
             for (Seller seller : sellers) {
+                OrderSellerCountEntity orderSellerCountEntity = new OrderSellerCountEntity();
                 criteria.andSellerIdEqualTo(seller.getSellerId());
                 List<OrderItem> items = orderItemDao.selectByExample(query);
-                orderItemCountEntity.setSeller(seller);
-                orderItemCountEntity.setOrderItemList(items);
-                orderItemCountEntity.setCountNum(getCountNum(items));
-                orderItemCountEntity.setTotalCount(getTotalCount(items));
+                orderSellerCountEntity.setSeller(seller);
+                orderSellerCountEntity.setOrderItemList(items);
+                orderSellerCountEntity.setCountNum(getCountNum(items));
+                orderSellerCountEntity.setTotalCount(getTotalCount(items));
+                orderSellerCountEntitys.add(orderSellerCountEntity);
             }
-        }
         //将统计出来的数据添加到OrderItemCountEntity返回
-        return orderItemCountEntitys;
+        return orderSellerCountEntitys;
     }
 
     //获取对应商家的订单数量
