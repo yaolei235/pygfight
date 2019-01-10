@@ -7,7 +7,6 @@ import cn.itcast.core.pojo.order.OrderItem;
 import cn.itcast.core.pojo.order.OrderItemQuery;
 import cn.itcast.core.pojo.seller.Seller;
 import com.alibaba.dubbo.config.annotation.Service;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
@@ -18,7 +17,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class OrderItemCountServiceImpl implements OrderSellerCountService {
+public class OrderSellerCountServiceImpl implements OrderSellerCountService {
 
     @Autowired
     private SellerDao sellerDao;
