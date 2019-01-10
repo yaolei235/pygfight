@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller,$location,typeTemplateService ,itemCatService,uploadService ,goodsService){	
+app.controller('goodsController' ,function($scope,$controller,$location,typeTemplateService ,itemCatService,uploadService ,goodsService,seckillService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -86,6 +86,30 @@ app.controller('goodsController' ,function($scope,$controller,$location,typeTemp
 			}		
 		);				
 	}
+
+
+
+
+    // 保存秒杀的方法:
+    $scope.saveSeckill = function(){
+        var object;
+        /*var dis = $scope.selectIds;
+        alert(ids);*/
+        // 保存
+        object = seckillService.add($scope.selectIds,$scope.entity);
+        object.success(function(response){
+            // {success:true,message:xxx}
+            // 判断保存是否成功:
+            if(response.success==true){
+                // 保存成功
+                alert(response.message);
+                $scope.reloadList();
+            }else{
+                // 保存失败
+                alert(response.message);
+            }
+        });
+    }
 	
 	 
 	//批量删除 
