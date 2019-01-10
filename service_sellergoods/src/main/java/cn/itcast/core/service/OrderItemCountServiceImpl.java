@@ -7,16 +7,14 @@ import cn.itcast.core.pojo.order.OrderItem;
 import cn.itcast.core.pojo.order.OrderItemQuery;
 import cn.itcast.core.pojo.seller.Seller;
 import com.alibaba.dubbo.config.annotation.Service;
-import jdk.internal.jline.internal.TestAccessible;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sun.tools.internal.xjc.reader.Ring.add;
+
 
 @Service
 @Transactional
