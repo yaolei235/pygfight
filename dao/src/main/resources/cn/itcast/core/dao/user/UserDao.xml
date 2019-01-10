@@ -93,6 +93,10 @@
       ${fields}
     </if>
   </sql>
+  <!--excel-->
+  <select id="findTitle" resultType="String" parameterType="String">
+    SELECT column_name FROM information_schema.COLUMNS WHERE table_name= 'tb_user' AND TABLE_SCHEMA='pinyougou';
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.itcast.core.pojo.user.UserQuery" >
     select
     <if test="distinct" >

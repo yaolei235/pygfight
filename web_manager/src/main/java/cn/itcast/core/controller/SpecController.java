@@ -101,4 +101,23 @@ public class SpecController {
         List<Map> maps = specService.selectOptionList();
         return maps;
     }
+
+
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status) {
+
+        try {
+            if (ids != null) {
+
+                specService.updateStatus(ids, status);
+            }
+            return new Result(true, "状态修改成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "状态修改失败!");
+
+        }
+
+    }
+
 }

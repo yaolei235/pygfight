@@ -66,15 +66,7 @@ public class TemplateServiceImpl implements TemplateService {
         return new PageResult(templateList.getTotal(), templateList.getResult());
     }
 
-    @Override
-    public void add(TypeTemplate template) {
-        templateDao.insertSelective(template);
-    }
 
-    @Override
-    public TypeTemplate findOne(Long id) {
-        return templateDao.selectByPrimaryKey(id);
-    }
 
     @Override
     public void update(TypeTemplate template) {
@@ -117,4 +109,68 @@ public class TemplateServiceImpl implements TemplateService {
 
         return maps;
     }
+
+    //模板状态审核
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        for (Long id : ids) {
+            TypeTemplate typeTemplate = templateDao.selectByPrimaryKey(id);
+            typeTemplate.setStatus(status);
+
+            templateDao.updateByPrimaryKeySelective(typeTemplate);
+        }
+    }
+
+
+    @Override
+    public PageResult search(TypeTemplate typeTemplate, Integer page, Integer rows) {
+
+        //1. 查询所有的模板数据
+        List<TypeTemplate> typeTemplates = templateDao.selectByExample(null);
+
+        for (TypeTemplate template : typeTemplates) {
+            //2. 把模板数据的id作为key,品牌集合作为value 存入redis中
+            String brandIdsJSON = template.getBrandIds();
+            List<Map> brandList = JSON.parseArray(brandIdsJSON, Map.class);
+
+            redisTemplate.boundHashOps(Constants.BRAND_LIST_REDIS).put(template.getId(),brandList);
+
+
+            //3. 把模板数据的id作为key,规格集合作为value 存入redis中
+            //根据模板查询出规格选项 直接调用下边的方法
+            List<Map> specList = findBySpecList(template.getId());
+            redisTemplate.boundHashOps(Constants.SPEC_LIST_REDIS).put(template.getId(), specList);
+
+        }
+
+
+
+        //4. 分页查询 将数据展示到页面
+        PageHelper.startPage(page,rows);
+
+        TypeTemplateQuery query = new TypeTemplateQuery();
+        TypeTemplateQuery.Criteria criteria = query.createCriteria();
+        if (typeTemplate!=null){
+            if (typeTemplate.getName()!=null){
+                criteria.andNameLike("%"+typeTemplate.getName()+"%");
+            }
+        }
+
+
+        Page<TypeTemplate> templatePage = (Page<TypeTemplate>)templateDao.selectByExample(query);
+
+        return new PageResult(templatePage.getTotal(), templatePage.getResult());
+
+    }
+
+    @Override
+    public void add(TypeTemplate template) {
+        templateDao.insertSelective(template);
+    }
+
+    @Override
+    public TypeTemplate findOne(Long id) {
+        return templateDao.selectByPrimaryKey(id);
+    }
+
 }

@@ -36,4 +36,39 @@ public class TemplateController {
         return list;
     }
 
+
+
+    @RequestMapping("/search")
+    public PageResult search(@RequestBody TypeTemplate typeTemplate,Integer page,Integer rows){
+        PageResult result = templateService.search(typeTemplate, page, rows);
+
+        return result;
+    }
+
+
+    @RequestMapping("/add")
+    public Result add(@RequestBody TypeTemplate template){
+        try {
+            template.setStatus("0");
+            templateService.add(template);
+            return new Result(true, "添加成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "添加失败!");
+        }
+    }
+
+
+    @RequestMapping("/delete")
+    public Result delete(Long[] ids){
+        try {
+            templateService.delete(ids);
+            return new Result(true, "删除成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "删除失败!");
+        }
+    }
+
+
 }

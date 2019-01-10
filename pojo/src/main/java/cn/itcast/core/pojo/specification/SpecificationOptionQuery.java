@@ -244,6 +244,9 @@ public class SpecificationOptionQuery {
             return (Criteria) this;
         }
 
+
+
+
         public Criteria andSpecIdIsNull() {
             addCriterion("spec_id is null");
             return (Criteria) this;

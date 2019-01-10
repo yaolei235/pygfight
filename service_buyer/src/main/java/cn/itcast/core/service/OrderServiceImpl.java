@@ -4,12 +4,16 @@ import cn.itcast.core.dao.log.PayLogDao;
 import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
 import cn.itcast.core.pojo.entity.BuyerCart;
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderQuery;
 import cn.itcast.core.util.Constants;
 import cn.itcast.core.util.IdWorker;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.opensaml.xml.signature.P;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -147,5 +151,28 @@ public class OrderServiceImpl implements OrderService {
             //4. 删除redis中的支付日志数据
             redisTemplate.boundHashOps("payLog").delete(userName);
         }
+    }
+    @Override
+    public PageResult findPageBySellerId(Order order, int page, int rows, String sellerId) {
+        PageHelper.startPage(page, rows);
+        OrderQuery orderQuery = new OrderQuery();
+        OrderQuery.Criteria criteria = orderQuery.createCriteria();
+        criteria.andSellerIdEqualTo(sellerId);
+        if (order.getOrderId() != null && !"".equals(order.getOrderId())) {
+            criteria.andOrderIdEqualTo(order.getOrderId());
+        }
+        Page<Order> pageR = (Page<Order>)orderDao.selectByExample(orderQuery);
+        return new PageResult(pageR.getTotal(), pageR.getResult());
+    }
+
+    @Override
+    public Order findOne(Long id) {
+        Order order = orderDao.selectByPrimaryKey(id);
+        return order;
+    }
+
+    @Override
+    public void updateShiping(Order order) {
+        orderDao.updateByPrimaryKeySelective(order);
     }
 }

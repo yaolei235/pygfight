@@ -2,12 +2,16 @@ package cn.itcast.core.dao.specification;
 
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationQuery;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
 public interface SpecificationDao {
+
+    //自己添加的 作为模板的下拉菜单
+    List<Map> selectOptionList();
+
     int countByExample(SpecificationQuery example);
 
     int deleteByExample(SpecificationQuery example);
@@ -29,6 +33,4 @@ public interface SpecificationDao {
     int updateByPrimaryKeySelective(Specification record);
 
     int updateByPrimaryKey(Specification record);
-
-    public List<Map> selectOptionList();
 }

@@ -61,4 +61,21 @@ public class TemplateController {
             return new Result(false, "删除失败!");
         }
     }
+
+    //模板审核
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status) {
+        try {
+            if (ids != null) {
+
+                templateService.updateStatus(ids, status);
+            }
+            return new Result(true, "状态修改成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "状态修改失败!");
+
+        }
+
+    }
 }
