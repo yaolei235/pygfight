@@ -122,5 +122,28 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
             }
         });
     }
+    //文件上传
+    $scope.uploadFile = function(){
+        // 调用uploadService的方法完成文件的上传
+        uploadService.uploadFile().success(function(response){
+            if(response.success){
+                $scope.excel_entity = response.message;
+                // 获得url
+                alert(" 上传成功,请点击保存!");
+            }else{
+                alert(response.message);
+            }
+        });
+    }
+    $scope.add_excel_entity=function (excel_entity) {
 
+        specificationService.addExcel($scope.excel_entity).success(function (response) {
+            if(response.success){
+                $scope.reloadList();
+            }else {
+                alert(response.message);
+            }
+        });
+
+    }
 });	

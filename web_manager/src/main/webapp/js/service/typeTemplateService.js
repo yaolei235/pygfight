@@ -33,5 +33,7 @@ app.service('typeTemplateService',function($http){
     this.updateStatus = function(ids,status){
         return $http.get('../typeTemplate/updateStatus.do?ids='+ids+"&status="+status);
     }
-
+    this.addExcel=function(excel_entity) {
+        return $http.get('../typeTemplate/updateBrand.do?excelUrl='+excel_entity);
+    }
 });

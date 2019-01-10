@@ -42,6 +42,8 @@ app.service('itemCatService',function($http){
         return $http.get('../itemCat/selectTypeList.do');
     }
 
-
+    this.addExcel=function(excel_entity) {
+        return $http.get('../itemCat/updateBrand.do?excelUrl='+excel_entity);
+    }
 
 });
