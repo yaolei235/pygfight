@@ -1,7 +1,11 @@
 package cn.itcast.core.pojo.user;
 
+import cn.itcast.core.pojo.order.Order;
+import cn.itcast.core.pojo.order.OrderItem;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class User implements Serializable {
     private Long id;
@@ -109,6 +113,7 @@ public class User implements Serializable {
     private Date lastLoginTime;
 
     private static final long serialVersionUID = 1L;
+
 
     public Long getId() {
         return id;
