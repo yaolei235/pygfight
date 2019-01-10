@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -117,12 +120,10 @@ public class BrandController {
 
     @RequestMapping("/updateBrand")
     public Result updateBrand(String excelUrl){
-
         List<String> title = brandService.findTitle();
-        System.out.println(excelUrl);
+        //System.out.println(excelUrl);
         try {
-            List<Brand> brands = ExcelUtil.readExcel(new Brand(), excelUrl, title);
-            System.out.println(brands);
+            List<Brand> brands = ExcelUtil.readExcel(excelUrl, title);
             brandService.addBrands(brands);
         } catch (Exception e) {
             e.printStackTrace();

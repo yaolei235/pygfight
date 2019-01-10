@@ -2,18 +2,18 @@ package cn.itcast.core.util;
 
 
 
-import cn.itcast.core.pojo.user.User;
+import cn.itcast.core.pojo.good.Brand;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,51 +70,46 @@ public class ExcelUtil {
     }
 
     //导人excel表
-    public static <T> List<T> readExcel(T t,String fileName,List<String> title) throws Exception{
-
-
-        InputStream is = new FileInputStream(new File(fileName));
+    public static  List<Brand> readExcel(String fileName, List<String> title) throws Exception {
+        URL url = new URL(fileName);
+        InputStream is = url.openConnection().getInputStream();
         Workbook hssfWorkbook = null;
-        if (fileName.endsWith("xlsx")){
+        if (fileName.endsWith("xlsx")) {
             hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
-        }else if (fileName.endsWith("xls")){
+        } else if (fileName.endsWith("xls")) {
             hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
 
         }
-
-        List<T> list = new ArrayList<T>();
+        List<Brand> list = new ArrayList<>();
+        Brand brand = new Brand();
         // 循环工作表Sheet   从1开始,因为一般第一行都是列名
-        for (int numSheet = 1; numSheet <hssfWorkbook.getNumberOfSheets(); numSheet++) {
-            Class<?> aClass = t.getClass();
-            Method[] methods = aClass.getMethods();
+        for (int numSheet = 0; numSheet < hssfWorkbook.getNumberOfSheets(); numSheet++) {
+
             //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
             Sheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
             if (hssfSheet == null) {
                 continue;
             }
             // 循环行Row
-            for (int i = 0; i < title.size(); i++) {
-                String s = title.get(0);
-                String ss = "set"+s.replaceAll("-", "");
-                Row hssfRow = hssfSheet.getRow(i+1);
+            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
+                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+                Row hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
 
-                    for (Method method : methods) {
-                        String method1 = method + "";
-                        String[] split = method1.split("\\(");
-                        String[] split1 = split[0].split("/.");
-                        method1 = split1[split1.length - 1].toLowerCase();
-                        if (ss.equals(method1)) {
-                            method.invoke(t,hssfRow.getCell(i));
-                            break;
-                        }
-                    }
+                    Cell id = hssfRow.getCell(0);
+                    Cell name = hssfRow.getCell(1);
+                    Cell first_char = hssfRow.getCell(2);
+                    Cell status = hssfRow.getCell(3);
+
+                    brand.setId(Long.parseLong(id.toString().split("\\.")[0]));
+                    brand.setName(name.toString());
+                    brand.setFirstChar(first_char.toString().substring(0,1));
+                    brand.setStatus(status.toString().split("\\.")[0]);
+                    list.add(brand);
                 }
             }
-            list.add(t);
 
-        }
-
+            }
         return list;
     }
 }

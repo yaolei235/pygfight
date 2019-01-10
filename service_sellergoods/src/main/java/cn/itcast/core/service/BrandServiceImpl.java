@@ -103,6 +103,9 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public void addBrands(List<Brand> brands) {
+        if (brands==null || brands.size()==0){
+            return;
+        }
         List<Brand> brandList = brandDao.selectByExample(null);
         for (Brand brand : brands) {
             for (Brand brand1 : brandList) {
