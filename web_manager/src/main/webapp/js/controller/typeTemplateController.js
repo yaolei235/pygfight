@@ -1,5 +1,5 @@
 //控制层 
-app.controller('typeTemplateController' ,function($scope,$controller,brandService ,specificationService  ,typeTemplateService){	
+app.controller('typeTemplateController' ,function($scope,$controller,brandService ,specificationService ,uploadService ,typeTemplateService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -135,9 +135,9 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
             }
         });
     }
-    $scope.add_excel_entity=function (excel_entity) {
+    $scope.add_type_entity=function (excel_entity) {
 
-        specificationService.addExcel($scope.excel_entity).success(function (response) {
+        typeTemplateService.addTypeExcel($scope.excel_entity).success(function (response) {
             if(response.success){
                 $scope.reloadList();
             }else {

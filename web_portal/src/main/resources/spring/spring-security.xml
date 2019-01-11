@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+						http://code.alibabatech.com/schema/dubbo
+					    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 	
 	<http pattern="/css/**" security="none"></http>
 	<http pattern="/img/**" security="none"></http>
@@ -21,7 +25,7 @@
 		<intercept-url pattern="/itemsearch/*.do" access="IS_AUTHENTICATED_ANONYMOUSLY"></intercept-url>
 		<intercept-url pattern="/content/*.do" access="IS_AUTHENTICATED_ANONYMOUSLY"></intercept-url>
         <!-- 拦截除了放行的所有请求, 必须拥有ROLE_USER权限才可以继续访问-->
-        <intercept-url pattern="/**" access="ROLE_USER"/>   
+        <intercept-url pattern="/**" access="ROLE_USER"/>
         <csrf disabled="true"/>  
         <!-- custom-filter为过滤器， position 表示将过滤器放在指定的位置上，before表示放在指定位置之前  ，after表示放在指定的位置之后  -->           
         <custom-filter ref="casAuthenticationFilter"  position="CAS_FILTER" />      
@@ -68,7 +72,17 @@
         <beans:property name="key" value="an_id_for_this_auth_provider_only"/> 
     </beans:bean>        
    		 <!-- 认证类 -->
-	<beans:bean id="userDetailsService" class="cn.itcast.core.service.UserDetailServiceImpl"/>  
+   <!-- &lt;!&ndash; 引用dubbo 服务 &ndash;&gt;
+    <dubbo:application name="pinyougou-portal-web" />
+    <dubbo:registry address="zookeeper://192.168.200.128:2181"/>
+    <dubbo:annotation package="cn.itcast.core.controller" />
+    &lt;!&ndash; 配置指定使用的dubbo的service服务接口 &ndash;&gt;
+    <dubbo:reference id="userService"  interface="cn.itcast.core.service.UserService" >
+    </dubbo:reference>-->
+    <!-- 自定义认证类 -->
+    <beans:bean id="userDetailsService" class="cn.itcast.core.service.UserDetailServiceImpl">
+        <!--<beans:property name="userService" ref="userService"></beans:property>-->
+    </beans:bean>
 	
 	<!-- 认证过滤器 结束 -->
 	

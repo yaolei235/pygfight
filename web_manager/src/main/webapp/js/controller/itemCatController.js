@@ -181,7 +181,7 @@ app.controller('itemCatController' ,function($scope,$controller ,uploadService,i
     }
     $scope.add_excel_entity=function (excel_entity) {
 
-        itemCatService.addExcel($scope.excel_entity).success(function (response) {
+        itemCatService.addItemExcel($scope.excel_entity).success(function (response) {
             if(response.success){
                 $scope.reloadList();
             }else {

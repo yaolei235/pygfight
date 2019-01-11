@@ -94,17 +94,17 @@ app.controller("brandController",function($scope,$controller,$http,uploadService
         });
     }
 //文件上传
-    $scope.uploadFile = function(){
-        // 调用uploadService的方法完成文件的上传
-        uploadService.uploadFile().success(function(response){
-            if(response.success){
-                $scope.excel_entity = response.message;
-                // 获得url
-                alert(" 上传成功,请点击保存!");
-            }else{
-                alert(response.message);
-            }
-        });
+        $scope.uploadFile = function(){
+            // 调用uploadService的方法完成文件的上传
+            uploadService.uploadFile().success(function(response){
+                if(response.success){
+                    $scope.excel_entity = response.message;
+                    // 获得url
+                    alert(" 上传成功,请点击保存!");
+                }else{
+                    alert(response.message);
+                }
+            });
     }
     $scope.add_excel_entity=function (excel_entity) {
 

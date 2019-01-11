@@ -68,17 +68,17 @@
             </thead>
             <tbody>
             <tr ng-repeat="entity in list">
-                <td><input  type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
+                <td><input ng-click="updateSelection($event,entity.id)" type="checkbox"></td>
                 <td>{{entity.id}}</td>
                 <td>{{entity.username}}</td>
                 <td>{{entity.name}}</td>
                 <td>{{entity.phone}}</td>
                 <td>{{entity.email}}</td>
                 <td>{{entity.qq}}</td>
-                <td>{{entity.sex}}</td>
+                <td>{{sex[entity.sex]}}</td>
                 <td>{{entity.userLevel}}</td>
                 <td>{{entity.email}}</td>
-                <td>{{entity.auditstatus}}</td>
+                <td><span>{{status[entity.auditstatus]}}</span></td>
             </tr>
 
             </tbody>

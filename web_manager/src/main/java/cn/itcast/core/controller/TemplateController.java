@@ -2,13 +2,17 @@ package cn.itcast.core.controller;
 
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.template.TypeTemplate;
 import cn.itcast.core.service.TemplateService;
+import cn.itcast.core.util.ExcelUtil;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.apache.ibatis.io.ResolverUtil;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/typeTemplate")
@@ -78,4 +82,16 @@ public class TemplateController {
         }
 
     }
+    @RequestMapping("/updateSpec")
+    public Result updateBrand(String excelUrl){
+        //System.out.println(excelUrl);
+        try {
+            List<TypeTemplate> typeTemplates = ExcelUtil.readExcelType(excelUrl);
+            templateService.addTypeT(typeTemplates);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Result(true,"保存成功");
+    }
+
 }
