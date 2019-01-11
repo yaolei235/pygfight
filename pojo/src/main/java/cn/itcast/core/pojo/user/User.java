@@ -1,11 +1,7 @@
 package cn.itcast.core.pojo.user;
 
-import cn.itcast.core.pojo.order.Order;
-import cn.itcast.core.pojo.order.OrderItem;
-
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 public class User implements Serializable {
     private Long id;
@@ -112,8 +108,12 @@ public class User implements Serializable {
      */
     private Date lastLoginTime;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 权限状态
+     */
+    private String auditstatus;
 
+    private static final long serialVersionUID = 1L;
 
     public Long getId() {
         return id;
@@ -291,6 +291,14 @@ public class User implements Serializable {
         this.lastLoginTime = lastLoginTime;
     }
 
+    public String getAuditstatus() {
+        return auditstatus;
+    }
+
+    public void setAuditstatus(String auditstatus) {
+        this.auditstatus = auditstatus == null ? null : auditstatus.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -319,6 +327,7 @@ public class User implements Serializable {
         sb.append(", experienceValue=").append(experienceValue);
         sb.append(", birthday=").append(birthday);
         sb.append(", lastLoginTime=").append(lastLoginTime);
+        sb.append(", auditstatus=").append(auditstatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
@@ -357,7 +366,8 @@ public class User implements Serializable {
             && (this.getPoints() == null ? other.getPoints() == null : this.getPoints().equals(other.getPoints()))
             && (this.getExperienceValue() == null ? other.getExperienceValue() == null : this.getExperienceValue().equals(other.getExperienceValue()))
             && (this.getBirthday() == null ? other.getBirthday() == null : this.getBirthday().equals(other.getBirthday()))
-            && (this.getLastLoginTime() == null ? other.getLastLoginTime() == null : this.getLastLoginTime().equals(other.getLastLoginTime()));
+            && (this.getLastLoginTime() == null ? other.getLastLoginTime() == null : this.getLastLoginTime().equals(other.getLastLoginTime()))
+            && (this.getAuditstatus() == null ? other.getAuditstatus() == null : this.getAuditstatus().equals(other.getAuditstatus()));
     }
 
     @Override
@@ -386,6 +396,7 @@ public class User implements Serializable {
         result = prime * result + ((getExperienceValue() == null) ? 0 : getExperienceValue().hashCode());
         result = prime * result + ((getBirthday() == null) ? 0 : getBirthday().hashCode());
         result = prime * result + ((getLastLoginTime() == null) ? 0 : getLastLoginTime().hashCode());
+        result = prime * result + ((getAuditstatus() == null) ? 0 : getAuditstatus().hashCode());
         return result;
     }
 }

@@ -1,8 +1,5 @@
 package cn.itcast.core.service;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -43,9 +40,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
         //2. 如果获取的数据为空则证明用户名输入错误, 如果能获取到数据, 将用户名, 密码返回并且给这个用户赋予对应的访问权限
         if (userService.findOne(username) != null) {
             //判断商家审核通过
-            /*if ("1".equals(userService.findOne(username).getAuditstatus())) {
+            if ("1".equals(userService.findOne(username).getAuditstatus())) {
                 return new User(username, userService.findOne(username).getPassword(), authList);
-            }*/
+            }
         }
         return null;
     }
