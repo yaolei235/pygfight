@@ -250,11 +250,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateStatus(Long id, String status) {
+    public void updateStatus(final Long id, String status) {
         //修改用户状态
         User user = new User();
         user.setId(id);
-        //user.setAuditstatus(status);
+        user.setAuditstatus(status);
         userDao.updateByPrimaryKeySelective(user);
     }
 
@@ -317,7 +317,7 @@ public class UserServiceImpl implements UserService {
     public User findOne(String username) {
         UserQuery query = new UserQuery();
         UserQuery.Criteria criteria = query.createCriteria();
-        criteria.andUsernameLike(username);
+        criteria.andUsernameEqualTo(username);
         List<User> users = userDao.selectByExample(query);
         if (users.size()>0){
             return users.get(0);

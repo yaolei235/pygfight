@@ -120,10 +120,8 @@ public class BrandController {
 
     @RequestMapping("/updateBrand")
     public Result updateBrand(String excelUrl){
-        List<String> title = brandService.findTitle();
-        //System.out.println(excelUrl);
         try {
-            List<Brand> brands = ExcelUtil.readExcel(excelUrl, title);
+            List<Brand> brands = ExcelUtil.readExcelBrand(excelUrl);
             brandService.addBrands(brands);
         } catch (Exception e) {
             e.printStackTrace();

@@ -3,8 +3,10 @@ package cn.itcast.core.controller;
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.entity.SpecEntity;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.service.SpecService;
+import cn.itcast.core.util.ExcelUtil;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,5 +121,6 @@ public class SpecController {
         }
 
     }
+
 
 }

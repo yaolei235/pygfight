@@ -26,4 +26,7 @@ public interface ItemCatService {
 
     public PageResult findPage(Integer pageNum, Integer pageSize);
 
+    public List<ItemCat> findItemCatList();
+
+    void addItemCas(List<ItemCat> itemCat);
 }

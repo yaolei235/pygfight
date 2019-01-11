@@ -20,6 +20,32 @@ app.controller("userController",function($scope,$controller,$http,userService){
         });
     }
 
+    // 显示状态
+    $scope.status = ["冻结","正常"];
+
+    $scope.sex = ["男","女"];
+
+    // 审核的方法:
+    $scope.updateStatus = function(status){
+        userService.updateStatus($scope.selectIds,status).success(function(response){
+            if(response.success){
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];
+            }else{
+                alert(response.message);
+            }
+        });
+    }
+
+    // 假设定义一个查询的实体：searchEntity
+    $scope.search = function(page,rows){
+        // 向后台发送请求获取数据:
+        userService.search(page,rows,$scope.searchEntity).success(function(response){
+            $scope.paginationConf.totalItems = response.total;
+            $scope.list = response.rows;
+        });
+    }
+
     // 导出excel表:
     $scope.getExcel = function(){
         userService.getExcel().success(function(response){
