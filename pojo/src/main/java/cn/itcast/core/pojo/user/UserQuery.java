@@ -1564,6 +1564,76 @@ public class UserQuery {
             addCriterion("last_login_time not between", value1, value2, "lastLoginTime");
             return (Criteria) this;
         }
+
+        public Criteria andAuditstatusIsNull() {
+            addCriterion("auditstatus is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusIsNotNull() {
+            addCriterion("auditstatus is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusEqualTo(String value) {
+            addCriterion("auditstatus =", value, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusNotEqualTo(String value) {
+            addCriterion("auditstatus <>", value, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusGreaterThan(String value) {
+            addCriterion("auditstatus >", value, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusGreaterThanOrEqualTo(String value) {
+            addCriterion("auditstatus >=", value, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusLessThan(String value) {
+            addCriterion("auditstatus <", value, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusLessThanOrEqualTo(String value) {
+            addCriterion("auditstatus <=", value, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusLike(String value) {
+            addCriterion("auditstatus like", value, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusNotLike(String value) {
+            addCriterion("auditstatus not like", value, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusIn(List<String> values) {
+            addCriterion("auditstatus in", values, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusNotIn(List<String> values) {
+            addCriterion("auditstatus not in", values, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusBetween(String value1, String value2) {
+            addCriterion("auditstatus between", value1, value2, "auditstatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditstatusNotBetween(String value1, String value2) {
+            addCriterion("auditstatus not between", value1, value2, "auditstatus");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
