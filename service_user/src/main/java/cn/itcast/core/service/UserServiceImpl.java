@@ -228,14 +228,17 @@ public class UserServiceImpl implements UserService {
         int unactiveCount=0;
 
         for (User user : userList) {
+            //获取每个用户的经验值
             Integer experienceValue = user.getExperienceValue();
-            if (experienceValue>2 && experienceValue!=null){
+
+            if (experienceValue>2){
+                //活跃用户数量+1
                 activeCount ++;
             }else {
+                //经验值小于2,非活跃用户+1
                 unactiveCount++;
             }
         }
-
         map.put("totalCount", size);
         map.put("activeCount", activeCount);
         map.put("unactiveCount",unactiveCount);
