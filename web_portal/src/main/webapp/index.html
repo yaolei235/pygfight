@@ -149,7 +149,7 @@
 							 ng-mouseleave="flag=false">
 							<h3><a href="">{{itemCat1.name}}</a></h3>
 							<!--通过三元表达式确定是显示还是隐藏-->
-							<div class="item-list clearfix" style="display: {{flag?'block':'none'}};">
+							<div class="item-list clearfix" style="display: {{!flag?'none':'block'}};">
 								<div class="subitem">
 									<!--遍历2级分类-->
 									<dl class="fore1" ng-repeat="itemCat2 in itemCat1.itemCatList">
