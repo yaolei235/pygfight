@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("======" + sb.toString());
     }
     //查询用户及商品订单信息
-    public List<ArrayList<String>> findAllUser() {
+    public List<ArrayList<String>> findAllUsers() {
         List<User> users = userDao.selectByExample(null);
         List<ArrayList<String>> lists=new ArrayList<>();
 

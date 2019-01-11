@@ -47,7 +47,7 @@ public class UserController {
         //sheet名  表名
         String sheetName = "用户表";
         //users数据
-        List<ArrayList<String>> lists = userService.findAllUser();//创建HSSFWorkbook
+        List<ArrayList<String>> lists = userService.findAllUsers();//创建HSSFWorkbook
         HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(sheetName, title, lists, null);
         //获取项目路径
 

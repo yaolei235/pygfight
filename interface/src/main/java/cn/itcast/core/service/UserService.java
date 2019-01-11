@@ -16,7 +16,7 @@ public interface UserService {
 
     Map<String,Integer> findUsers();
 
-    List<ArrayList<String>> findAllUser();
+    List<ArrayList<String>> findAllUsers();
 
 
 }
