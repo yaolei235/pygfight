@@ -1,15 +1,18 @@
 package cn.itcast.core.controller;
 
 import cn.itcast.core.pojo.entity.Result;
+import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.service.UserService;
 import cn.itcast.core.util.PhoneFormatCheckUtils;
 import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -67,6 +70,16 @@ public class UserController {
             e.printStackTrace();
             return  new Result(false, "注册失败!");
         }
+    }
+
+    //展示该用户的未支付订单
+    // 根据用户名 查询所有的订单 ,页面展示的是每个订单详情对象
+    @RequestMapping("/showUnPay")
+    public List<Order> showUnPay(){
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return userService.showUnPayOrders(userName);
+
     }
 
 }

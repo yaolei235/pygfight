@@ -7,4 +7,15 @@ app.controller('indexController',function($scope,loginService){
 					}
 			);
 	}
+
+
+
+    $scope.showUnPay=function(){
+        loginService.showUnPay().success(
+            function(response){
+                $scope.list=response;
+            }
+        );
+    }
+
 });

@@ -1,5 +1,7 @@
 package cn.itcast.core.service;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -18,7 +20,7 @@ import java.util.List;
  */
 public class UserDetailServiceImpl implements UserDetailsService {
 
-
+    @Reference
     private UserService userService;
 
     public void setUserService(UserService userService) {
@@ -41,6 +43,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         if (userService.findOne(username) != null) {
             //判断商家审核通过
             if ("1".equals(userService.findOne(username).getAuditstatus())) {
+                userService.creatExperienceValue(username);
                 return new User(username, userService.findOne(username).getPassword(), authList);
             }
         }
