@@ -27,9 +27,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private UserService userService;
 
 
-
-
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //定义权限集合
