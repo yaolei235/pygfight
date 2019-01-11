@@ -22,6 +22,12 @@ import java.util.List;
 public class UserDetailServiceImpl implements UserDetailsService {
 
 
+    private UserService userService;
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //定义权限集合
@@ -29,10 +35,19 @@ public class UserDetailServiceImpl implements UserDetailsService {
         //向权限集合中加入访问权限
         authList.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        return new User(username, "", authList);
+        if (username == null) {
+            return null;
+        }
+        //1. 根据用户输入的用户名, 到数据库中获取对应的数据
 
-
+        //2. 如果获取的数据为空则证明用户名输入错误, 如果能获取到数据, 将用户名, 密码返回并且给这个用户赋予对应的访问权限
+        if (userService.findOne(username) != null) {
+            //判断商家审核通过
+            /*if ("1".equals(userService.findOne(username).getAuditstatus())) {
+                return new User(username, userService.findOne(username).getPassword(), authList);
+            }*/
+        }
+        return null;
     }
-
 
 }

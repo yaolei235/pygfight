@@ -1,5 +1,6 @@
 package cn.itcast.core.service;
 
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.user.User;
 
 import java.util.ArrayList;
@@ -14,11 +15,13 @@ public interface UserService {
 
     public  void  add(User user);
 
-
-
     Map<String,Integer> findActiveUsers( );
 
     List<ArrayList<String>> findAllUsers();
 
+    User findOne(String username);
 
+    PageResult findPage(User user, Integer page, Integer rows);
+
+    void updateStatus(Long id, String status);
 }
