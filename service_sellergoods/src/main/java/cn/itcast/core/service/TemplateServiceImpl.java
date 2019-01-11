@@ -3,7 +3,6 @@ package cn.itcast.core.service;
 import cn.itcast.core.dao.specification.SpecificationOptionDao;
 import cn.itcast.core.dao.template.TypeTemplateDao;
 import cn.itcast.core.pojo.entity.PageResult;
-import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
 import cn.itcast.core.pojo.template.TypeTemplate;
@@ -160,6 +159,35 @@ public class TemplateServiceImpl implements TemplateService {
         Page<TypeTemplate> templatePage = (Page<TypeTemplate>)templateDao.selectByExample(query);
 
         return new PageResult(templatePage.getTotal(), templatePage.getResult());
+
+    }
+
+    @Override
+    public void addTypeT(List<TypeTemplate> typeTemplates) {
+
+        if (typeTemplates==null || typeTemplates.size()==0){
+            return;
+        }
+        List<TypeTemplate> templates = templateDao.selectByExample(null);
+        for (int i = 0; i < typeTemplates.size(); i++) {
+            TypeTemplate template=typeTemplates.get(i);
+            if (templates.contains(template)){
+                continue;
+            }
+            for (int j=0;templates.size()>j;j++) {
+                if (template.getId().equals(templates.get(j).getId())){
+                    templateDao.updateByPrimaryKeySelective(template);
+                    break;
+                }else {
+                    if (j==templates.size()-1){
+                        template.setId(null);
+                        templateDao.insertSelective(template);
+                    }
+
+                }
+
+            }
+        }
 
     }
 

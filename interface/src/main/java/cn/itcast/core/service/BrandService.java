@@ -24,7 +24,5 @@ public interface BrandService {
 
     void updateStatus(Long[] ids, String status);
 
-    List<String> findTitle();
-
     void addBrands(List<Brand> brands);
 }

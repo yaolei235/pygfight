@@ -39,4 +39,7 @@ app.service('itemCatService',function($http){
     this.updateStatus = function(ids,status){
         return $http.get('../itemCat/updateStatus.do?ids='+ids+"&status="+status);
     }
+    this.addItemExcel=function(excel_entity) {
+        return $http.get('../itemCat/updateItemCas.do?excelUrl='+excel_entity);
+    }
 });
