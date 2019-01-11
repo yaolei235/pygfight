@@ -38,9 +38,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
         authList.add(new SimpleGrantedAuthority("ROLE_USER"));
         //用户登录时候,经验值加1
         if (username!=null){
-            UserQuery query = new UserQuery();
-            UserQuery.Criteria criteria = query.createCriteria();
-            criteria.andUsernameEqualTo(username);
+            //UserQuery query = new UserQuery();
+            //UserQuery.Criteria criteria = query.createCriteria();
+            //criteria.andUsernameEqualTo(username);
 
            /* //获取该用户民对应的用户(列表)
         List<cn.itcast.core.pojo.user.User> userList = userDao.selectByExample(query);
