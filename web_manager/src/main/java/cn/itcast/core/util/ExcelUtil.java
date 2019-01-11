@@ -3,18 +3,16 @@ package cn.itcast.core.util;
 
 
 import cn.itcast.core.pojo.good.Brand;
+import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.template.TypeTemplate;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,19 +71,10 @@ public class ExcelUtil {
 
     //导人excel表
     public static  List<Brand> readExcelBrand(String fileName) throws Exception {
-        URL url = new URL(fileName);
-        InputStream is = url.openConnection().getInputStream();
-        Workbook hssfWorkbook = null;
-        if (fileName.endsWith("xlsx")) {
-            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
-        } else if (fileName.endsWith("xls")) {
-            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
-
-        }
+        Workbook hssfWorkbook = getWorkbook(fileName);
         List<Brand> list = new ArrayList<>();
 
         // 循环工作表Sheet
-        assert hssfWorkbook != null;
         for (int numSheet = 0; numSheet < hssfWorkbook.getNumberOfSheets(); numSheet++) {
 
             //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
@@ -117,15 +106,7 @@ public class ExcelUtil {
 
 
     public static List<TypeTemplate> readExcelType(String fileName) throws Exception{
-        URL url = new URL(fileName);
-        InputStream is = url.openConnection().getInputStream();
-        Workbook hssfWorkbook = null;
-        if (fileName.endsWith("xlsx")) {
-            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
-        } else if (fileName.endsWith("xls")) {
-            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
-
-        }
+        Workbook hssfWorkbook = getWorkbook(fileName);
         List<TypeTemplate> list = new ArrayList<>();
 
         // 循环工作表Sheet   从1开始,因为一般第一行都是列名
@@ -166,5 +147,59 @@ public class ExcelUtil {
         return list;
 
 
+    }
+
+    public static List<ItemCat> readExcelItemCas(String fileName) throws Exception{
+        Workbook hssfWorkbook = getWorkbook(fileName);
+        List<ItemCat> list = new ArrayList<>();
+
+        // 循环工作表Sheet   从1开始,因为一般第一行都是列名
+        for (int numSheet = 0; numSheet < hssfWorkbook.getNumberOfSheets(); numSheet++) {
+
+            //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            Sheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            if (hssfSheet == null) {
+                continue;
+            }
+            // 循环行Row
+            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
+                ItemCat itemCat = new ItemCat();
+                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+                Row hssfRow = hssfSheet.getRow(rowNum);
+                if (hssfRow != null) {
+                    //读取表格内容并赋值给pojo类
+                    Cell id = hssfRow.getCell(0);
+                    Cell parentId = hssfRow.getCell(1);
+                    Cell name = hssfRow.getCell(2);
+                    Cell typeId = hssfRow.getCell(3);
+                    Cell status = hssfRow.getCell(4);
+
+                    itemCat.setId(Long.parseLong(id.toString().split("\\.")[0]));
+                    itemCat.setParentId(Long.parseLong(parentId.toString().split("\\.")[0]));
+                    itemCat.setName(name.toString());
+                    itemCat.setTypeId(Long.parseLong(typeId.toString().split("\\.")[0]));
+                    itemCat.setStatus(Long.parseLong(status.toString().split("\\.")[0]));
+
+
+                    list.add(itemCat);
+                }
+            }
+
+        }
+        return list;
+
+
+    }
+    private static Workbook getWorkbook(String fileName) throws IOException {
+        URL url = new URL(fileName);
+        InputStream is = url.openConnection().getInputStream();
+        Workbook hssfWorkbook = null;
+        if (fileName.endsWith("xlsx")) {
+            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
+        } else if (fileName.endsWith("xls")) {
+            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
+
+        }
+        return hssfWorkbook;
     }
 }

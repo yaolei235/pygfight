@@ -3,6 +3,7 @@ package cn.itcast.core.service;
 import cn.itcast.core.dao.item.ItemCatDao;
 import cn.itcast.core.dao.template.TypeTemplateDao;
 import cn.itcast.core.pojo.entity.PageResult;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.item.ItemCatQuery;
 import cn.itcast.core.util.Constants;
@@ -80,6 +81,34 @@ public class ItemCatServiceImpl implements ItemCatService {
         return itemCatList;
 
     }
+
+    @Override
+    public void addItemCas(List<ItemCat> itemCats) {
+
+        if (itemCats == null || itemCats.size() == 0) {
+            return;
+        }
+        List<ItemCat> itemCatList = catDao.selectByExample(null);
+        for (int i = 0; i < itemCats.size(); i++) {
+            ItemCat itemCat = itemCats.get(i);
+            if (itemCatList.contains(itemCat)) {
+                continue;
+            }
+            for (int j=0;itemCatList.size()>j;j++) {
+                if (itemCat.getId().equals(itemCatList.get(j).getId())) {
+                    catDao.updateByPrimaryKeySelective(itemCat);
+                    break;
+                }else {
+                    if (j==itemCatList.size()-1){
+                        catDao.insertSelective(itemCat);
+                    }
+
+                }
+            }
+
+        }
+    }
+
 
     @Override
     public List<ItemCat> findByParentId(Long parentId) {

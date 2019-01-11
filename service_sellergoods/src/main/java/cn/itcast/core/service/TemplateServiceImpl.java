@@ -169,23 +169,26 @@ public class TemplateServiceImpl implements TemplateService {
             return;
         }
         List<TypeTemplate> templates = templateDao.selectByExample(null);
-        for (TypeTemplate template : typeTemplates) {
-                for (TypeTemplate template1 : templates) {
-                    if (template.getId().equals(template1.getId())){
-                        templateDao.updateByPrimaryKeySelective(template);
-                        typeTemplates.remove(template);
-                        break;
+        for (int i = 0; i < typeTemplates.size(); i++) {
+            TypeTemplate template=typeTemplates.get(i);
+            if (templates.contains(template)){
+                continue;
+            }
+            for (int j=0;templates.size()>j;j++) {
+                if (template.getId().equals(templates.get(j).getId())){
+                    templateDao.updateByPrimaryKeySelective(template);
+                    break;
+                }else {
+                    if (j==templates.size()-1){
+                        template.setId(null);
+                        templateDao.insertSelective(template);
                     }
+
                 }
+
+            }
         }
-        System.out.println(typeTemplates);
-         if (typeTemplates.size()>0){
-                for (TypeTemplate template : typeTemplates) {
-                    template.setId(null);
-                    templateDao.insertSelective(template);
-                    System.out.println(template);
-                }
-         }
+
     }
 
     @Override

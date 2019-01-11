@@ -10,6 +10,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -99,25 +100,27 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public void addBrands(List<Brand> brands) {
-        if (brands==null || brands.size()==0){
+        if (brands == null || brands.size() == 0) {
             return;
         }
         List<Brand> brandList = brandDao.selectByExample(null);
         for (int i = 0; i < brands.size(); i++) {
             Brand brand = brands.get(i);
-            for (Brand brand1 : brandList) {
-                if (brand.equals(brand1)){
-                    brands.remove(brand);
+            if (brandList.contains(brand)) {
+                continue;
+            }
+            for (int j=0;brandList.size()>j;j++) {
+                if (brand.getId().equals(brandList.get(j).getId())) {
+                    brandDao.updateByPrimaryKeySelective(brand);
                     break;
+                }else {
+                    if (j==brandList.size()-1){
+                        brandDao.insertSelective(brand);
+                    }
+
                 }
             }
-        }
-        System.out.println(brands);
 
-        if (brands.size()>0){
-            for (Brand brand : brands) {
-                brandDao.insertSelective(brand);
-            }
         }
     }
 }
