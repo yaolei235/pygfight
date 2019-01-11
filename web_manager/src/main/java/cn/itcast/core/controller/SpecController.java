@@ -121,6 +121,16 @@ public class SpecController {
         }
 
     }
+    @RequestMapping("/updateSpecs")
+    public Result updateSpecs(String excelUrl) {
 
+        try {
+            Map<String, List> listMap = ExcelUtil.readExcelSpecs(excelUrl);
+            specService.addSpecs(listMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Result(true,"保存成功");
+    }
 
 }

@@ -111,6 +111,7 @@ app.controller('specificationController' ,function($scope,$controller ,$http,upl
             }
         });
     }
+
     $scope.add_excel_entity=function (excel_entity) {
         specificationService.addSpecExcel($scope.excel_entity).success(function (response) {
             if(response.success){

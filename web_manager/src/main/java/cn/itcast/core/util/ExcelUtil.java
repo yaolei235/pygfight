@@ -4,6 +4,8 @@ package cn.itcast.core.util;
 
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.item.ItemCat;
+import cn.itcast.core.pojo.specification.Specification;
+import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.template.TypeTemplate;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,23 +17,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ExcelUtil {
 
     /**
      * 导出Excel
+     *
      * @param sheetName sheet名称
-     * @param title 标题
-     * @param lists 内容
-     * @param wb HSSFWorkbook对象
+     * @param title     标题
+     * @param lists     内容
+     * @param wb        HSSFWorkbook对象
      * @return
      */
-    public static HSSFWorkbook getHSSFWorkbook(String sheetName, Object [] title, List<ArrayList<String>> lists, HSSFWorkbook wb){
+    public static HSSFWorkbook getHSSFWorkbook(String sheetName, Object[] title, List<ArrayList<String>> lists, HSSFWorkbook wb) {
 
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        if(wb == null){
+        if (wb == null) {
             wb = new HSSFWorkbook();
         }
 
@@ -49,16 +54,16 @@ public class ExcelUtil {
         HSSFCell cell = null;
 
         //创建标题  用户id	用户名	用户手机号	收货人地区名称	收货人	用户订单号	 商品	数量 订单总价	  	 支付状态
-        for(int i=0;i<title.length;i++){
+        for (int i = 0; i < title.length; i++) {
             cell = row.createCell(i);
-            cell.setCellValue(title[i]+"");
+            cell.setCellValue(title[i] + "");
             cell.setCellStyle(style);
         }
         /**
          * list集合
          */
         for (int i = 0; i < lists.size(); i++) {
-            row = sheet.createRow(i+1);
+            row = sheet.createRow(i + 1);
             ArrayList<String> list = lists.get(i);
             for (int j = 0; j < list.size(); j++) {
                 String s = list.get(j);
@@ -70,7 +75,7 @@ public class ExcelUtil {
     }
 
     //导人excel表
-    public static  List<Brand> readExcelBrand(String fileName) throws Exception {
+    public static List<Brand> readExcelBrand(String fileName) throws Exception {
         Workbook hssfWorkbook = getWorkbook(fileName);
         List<Brand> list = new ArrayList<>();
 
@@ -95,17 +100,17 @@ public class ExcelUtil {
                 Cell status = hssfRow.getCell(3);
                 brand.setId(Long.parseLong(id.toString().split("\\.")[0]));
                 brand.setName(name.toString());
-                brand.setFirstChar(first_char.toString().substring(0,1));
+                brand.setFirstChar(first_char.toString().substring(0, 1));
                 brand.setStatus(status.toString().split("\\.")[0]);
                 list.add(brand);
             }
 
-            }
+        }
         return list;
     }
 
 
-    public static List<TypeTemplate> readExcelType(String fileName) throws Exception{
+    public static List<TypeTemplate> readExcelType(String fileName) throws Exception {
         Workbook hssfWorkbook = getWorkbook(fileName);
         List<TypeTemplate> list = new ArrayList<>();
 
@@ -149,7 +154,7 @@ public class ExcelUtil {
 
     }
 
-    public static List<ItemCat> readExcelItemCas(String fileName) throws Exception{
+    public static List<ItemCat> readExcelItemCas(String fileName) throws Exception {
         Workbook hssfWorkbook = getWorkbook(fileName);
         List<ItemCat> list = new ArrayList<>();
 
@@ -190,6 +195,7 @@ public class ExcelUtil {
 
 
     }
+
     private static Workbook getWorkbook(String fileName) throws IOException {
         URL url = new URL(fileName);
         InputStream is = url.openConnection().getInputStream();
@@ -201,5 +207,66 @@ public class ExcelUtil {
 
         }
         return hssfWorkbook;
+    }
+
+    //添加
+    public static Map<String, List> readExcelSpecs(String fileName) throws Exception {
+        Workbook hssfWorkbook = getWorkbook(fileName);
+        Map<String, List> map = new HashMap<>();
+        List<Specification> specList = new ArrayList<>();
+        List<SpecificationOption> specCatList = new ArrayList<>();
+
+        // 循环工作表Sheet
+
+        //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+        Sheet hssfSheet = hssfWorkbook.getSheetAt(0);
+        if (hssfSheet != null) {
+            // 循环行Row
+            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
+                Specification spec = new Specification();
+                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+                Row hssfRow = hssfSheet.getRow(rowNum);
+                if (hssfRow != null) {
+                    //读取表格内容并赋值给pojo类
+                    Cell id = hssfRow.getCell(0);
+                    Cell name = hssfRow.getCell(1);
+                    Cell status = hssfRow.getCell(2);
+
+                    spec.setId(Long.parseLong(id.toString().split("\\.")[0]));
+                    spec.setSpecName(name.toString());
+                    spec.setStatus(status.toString().split("\\.")[0]);
+
+                    specList.add(spec);
+                }
+            }
+            map.put("specList", specList);
+        }
+        Sheet hssfSheet2 = hssfWorkbook.getSheetAt(1);
+        if (hssfSheet2 != null) {
+            // 循环行Row
+            for (int rowNum = 1; rowNum <= hssfSheet2.getLastRowNum(); rowNum++) {
+                SpecificationOption specOPtion = new SpecificationOption();
+                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+                Row hssfRow = hssfSheet2.getRow(rowNum);
+                if (hssfRow != null) {
+                    //读取表格内容并赋值给pojo类
+                    Cell id = hssfRow.getCell(0);
+                    Cell name = hssfRow.getCell(1);
+                    Cell specId = hssfRow.getCell(2);
+                    Cell orders = hssfRow.getCell(3);
+
+                    specOPtion.setId(Long.parseLong(id.toString().split("\\.")[0]));
+                    specOPtion.setOptionName(name.toString());
+                    specOPtion.setSpecId(Long.parseLong(specId.toString().split("\\.")[0]));
+                    specOPtion.setOrders(Integer.parseInt(orders.toString().split("\\.")[0]));
+
+                    specCatList.add(specOPtion);
+                }
+            }
+
+            map.put("specCatList", specCatList);
+
+        }
+        return map;
     }
 }

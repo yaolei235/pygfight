@@ -4,6 +4,7 @@ import cn.itcast.core.dao.specification.SpecificationDao;
 import cn.itcast.core.dao.specification.SpecificationOptionDao;
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.SpecEntity;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
@@ -35,10 +36,10 @@ public class SpecServiceImpl implements SpecService {
         SpecificationQuery.Criteria criteria = query.createCriteria();
         if (spec != null) {
             if (spec.getSpecName() != null && !"".equals(spec.getSpecName())) {
-                criteria.andSpecNameLike("%"+spec.getSpecName()+"%");
+                criteria.andSpecNameLike("%" + spec.getSpecName() + "%");
             }
         }
-        Page<Specification> specList = (Page<Specification>)specDao.selectByExample(query);
+        Page<Specification> specList = (Page<Specification>) specDao.selectByExample(query);
         return new PageResult(specList.getTotal(), specList.getResult());
     }
 
@@ -131,5 +132,53 @@ public class SpecServiceImpl implements SpecService {
 
         }
 
+    }
+
+    @Override
+    public void addSpecs(Map<String, List> listMap) {
+        List<Specification> specList = listMap.get("specList");
+        List<SpecificationOption> specCatList = listMap.get("specCatList");
+        //System.out.println(specList);
+        //System.out.println(specCatList);
+        if (specList.size() > 0) {
+            List<Specification> list = specDao.selectByExample(null);
+            for (int i = 0; i < specList.size(); i++) {
+                Specification spec = specList.get(i);
+                if (list.contains(spec)) {
+                    continue;
+                }
+                for (int j = 0; list.size() > j; j++) {
+                    if (spec.getId().equals(list.get(j).getId())) {
+                        specDao.updateByPrimaryKeySelective(spec);
+                        break;
+                    } else {
+                        if (j == list.size() - 1) {
+                            specDao.insertSelective(spec);
+                        }
+
+                    }
+                }
+            }
+        }
+        if (specCatList.size() > 0) {
+            List<SpecificationOption> list = optionDao.selectByExample(null);
+            for (int i = 0; i < specCatList.size(); i++) {
+                SpecificationOption spec = specCatList.get(i);
+                if (list.contains(spec)) {
+                    continue;
+                }
+                for (int j = 0; list.size() > j; j++) {
+                    if (spec.getId().equals(list.get(j).getId())) {
+                        optionDao.updateByPrimaryKeySelective(spec);
+                        break;
+                    } else {
+                        if (j == list.size() - 1) {
+                            optionDao.insertSelective(spec);
+                        }
+
+                    }
+                }
+            }
+        }
     }
 }

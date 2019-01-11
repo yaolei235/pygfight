@@ -38,6 +38,6 @@ app.service('specificationService',function($http){
         return $http.get('../specification/updateStatus.do?ids='+ids+"&status="+status);
     }
     this.addSpecExcel=function(excel_entity) {
-        return $http.get('../specification/updateBrand.do?excelUrl='+excel_entity);
+        return $http.get('../specification/updateSpecs.do?excelUrl='+excel_entity);
     }
 });

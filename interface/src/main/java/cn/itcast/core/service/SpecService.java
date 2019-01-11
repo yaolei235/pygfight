@@ -22,4 +22,6 @@ public interface SpecService{
     public List<Map> selectOptionList();
 
     void updateStatus(Long[] ids, String status);
+
+    void addSpecs(Map<String, List> listMap);
 }
