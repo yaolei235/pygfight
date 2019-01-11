@@ -25,7 +25,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Reference
     private UserDao userDao;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //定义权限集合
