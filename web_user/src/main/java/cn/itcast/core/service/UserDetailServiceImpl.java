@@ -35,11 +35,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
         if (username == null) {
             return null;
         }
-        //1. 根据用户输入的用户名, 到数据库中获取对应的数据
 
-        //2. 如果获取的数据为空则证明用户名输入错误, 如果能获取到数据, 将用户名, 密码返回并且给这个用户赋予对应的访问权限
+        //1. 如果获取的数据为空则证明用户名输入错误, 如果能获取到数据, 将用户名, 密码返回并且给这个用户赋予对应的访问权限
         if (userService.findOne(username) != null) {
-            //判断商家审核通过
+            //判断用户权限状态
             if ("1".equals(userService.findOne(username).getAuditstatus())) {
                 return new User(username, userService.findOne(username).getPassword(), authList);
             }

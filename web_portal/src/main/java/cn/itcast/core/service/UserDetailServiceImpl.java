@@ -22,34 +22,51 @@ import java.util.List;
  */
 public class UserDetailServiceImpl implements UserDetailsService {
 
+    /*@Reference
+    private UserDao userDao;*/
     @Reference
-    private UserDao userDao;
+    private UserService userService;
+
+   /* public void setUserService(UserService userService) {
+        this.userService = userService;
+    }*/
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //定义权限集合
         List<GrantedAuthority> authList = new ArrayList<>();
-        
+        authList.add(new SimpleGrantedAuthority("ROLE_USER"));
         //用户登录时候,经验值加1
         if (username!=null){
             UserQuery query = new UserQuery();
             UserQuery.Criteria criteria = query.createCriteria();
             criteria.andUsernameEqualTo(username);
 
-            //获取该用户民对应的用户(列表)
-            List<cn.itcast.core.pojo.user.User> userList = userDao.selectByExample(query);
+           /* //获取该用户民对应的用户(列表)
+        List<cn.itcast.core.pojo.user.User> userList = userDao.selectByExample(query);
 
-            for (cn.itcast.core.pojo.user.User user : userList) {
-                //经验值加1
-                user.setExperienceValue(user.getExperienceValue()+1);
-                //更新到数据库
-                userDao.updateByPrimaryKeySelective(user);
+        for (cn.itcast.core.pojo.user.User user : userList) {
+            //经验值加1
+            user.setExperienceValue(user.getExperienceValue()+1);
+            //更新到数据库
+            userDao.updateByPrimaryKeySelective(user);
+        }*/
+    }
+        //1. 如果获取的数据为空则证明用户名输入错误, 如果能获取到数据, 将用户名, 密码返回并且给这个用户赋予对应的访问权限
+        if (userService.findOne(username) != null) {
+            //判断用户权限状态
+            if ("1".equals(userService.findOne(username).getAuditstatus())) {
+
+                return new User(username, userService.findOne(username).getPassword(), authList);
             }
         }
+        /*//向权限集合中加入访问权限
 
-        //向权限集合中加入访问权限
-        authList.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        return new User(username, "", authList);
+        return new User(username, "", authList);*/
+
+        List<GrantedAuthority> authList1 = new ArrayList<>();
+        authList1.add(new SimpleGrantedAuthority("ROLE_USERSS"));
+        return  new User(username,"",authList1);
     }
 }
