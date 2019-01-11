@@ -1,6 +1,7 @@
 package cn.itcast.core.controller;
 
 
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.service.UserService;
@@ -96,5 +97,23 @@ public class UserController {
 
         return userService.findActiveUsers();
     }
-
+    @RequestMapping("/search")
+    public PageResult search(Integer page, Integer rows) {
+        PageResult result = userService.findPage(null, page, rows);
+        return result;
+    }
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status) {
+        try {
+            if (ids != null) {
+                for (Long id : ids) {
+                    userService.updateStatus(id, status);
+                }
+            }
+            return new Result(true, "状态修改成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "状态修改失败!");
+        }
+    }
 }
