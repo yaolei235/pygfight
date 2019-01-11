@@ -4,13 +4,17 @@ package cn.itcast.core.service;
 import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
 import cn.itcast.core.dao.user.UserDao;
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
 import cn.itcast.core.pojo.order.OrderItemQuery;
 import cn.itcast.core.pojo.order.OrderQuery;
 import cn.itcast.core.pojo.user.User;
+import cn.itcast.core.pojo.user.UserQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -114,7 +118,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("======" + sb.toString());
     }
     //查询用户及商品订单信息
-    public List<ArrayList<String>> findAllUser() {
+    public List<ArrayList<String>> findAllUsers() {
         List<User> users = userDao.selectByExample(null);
         List<ArrayList<String>> lists=new ArrayList<>();
 
@@ -209,27 +213,73 @@ public class UserServiceImpl implements UserService {
     }*/
 
     @Override
-    public Map<String, Integer> findUsers() {
+    public Map<String, Integer> findActiveUsers( ) {
+
         Map<String, Integer> map = new HashMap<>();
         List<User> userList = userDao.selectByExample(null);
+
         //用户总数量
         int size = userList.size();
 
         //活跃用户数量
-        int activeCount;
+        int activeCount=0;
+
         //非活跃用户数量
-        int unactiveCount;
+        int unactiveCount=0;
 
-        Map entries = redisTemplate.boundHashOps("logins").entries();
-        for (Object o : entries.keySet()) {
+        for (User user : userList) {
+            //获取每个用户的经验值
+            Integer experienceValue = user.getExperienceValue();
 
+            if (experienceValue>2){
+                //活跃用户数量+1
+                activeCount ++;
+            }else {
+                //经验值小于2,非活跃用户+1
+                unactiveCount++;
+            }
         }
-
         map.put("totalCount", size);
-        map.put("active", 5);
-        map.put("unactive",12 );
+        map.put("activeCount", activeCount);
+        map.put("unactiveCount",unactiveCount);
 
         return map;
     }
 
+    @Override
+    public void updateStatus(Long id, String status) {
+        //修改用户状态
+        User user = new User();
+        user.setId(id);
+        //user.setAuditstatus(status);
+        userDao.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public User findOne(String username) {
+        UserQuery query = new UserQuery();
+        UserQuery.Criteria criteria = query.createCriteria();
+        criteria.andUsernameLike(username);
+        List<User> users = userDao.selectByExample(query);
+        if (users.size()>0){
+            return users.get(0);
+        } else return null;
+    }
+    @Override
+    public PageResult findPage(User user, Integer page, Integer rows) {
+        //使用分页助手, 传入当前页和每页查询多少条数据
+        PageHelper.startPage(page, rows);
+        //创建查询对象
+        UserQuery query = new UserQuery();
+        //创建where查询条件
+        UserQuery.Criteria criteria = query.createCriteria();
+        if (user != null) {
+            if (user.getUsername() != null && !"".equals(user.getUsername())){
+                criteria.andUsernameLike("%"+user.getUsername()+"%");
+            }
+        }
+        //使用分页助手的page对象接收查询到的数据, page对象继承了ArrayList所以可以接收查询到的结果集数据.
+        Page<User> userList = (Page<User>)userDao.selectByExample(query);
+        return new PageResult(userList.getTotal(), userList.getResult());
+    }
 }

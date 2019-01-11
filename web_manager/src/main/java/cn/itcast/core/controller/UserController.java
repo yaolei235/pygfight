@@ -1,6 +1,7 @@
 package cn.itcast.core.controller;
 
 
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.service.UserService;
@@ -9,6 +10,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,7 +49,7 @@ public class UserController {
         //sheet名  表名
         String sheetName = "用户表";
         //users数据
-        List<ArrayList<String>> lists = userService.findAllUser();//创建HSSFWorkbook
+        List<ArrayList<String>> lists = userService.findAllUsers();//创建HSSFWorkbook
         HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(sheetName, title, lists, null);
         //获取项目路径
 
@@ -93,7 +95,25 @@ public class UserController {
     @RequestMapping("/findUsers")
     public Map<String,Integer> findUsers(){
 
-        return userService.findUsers();
+        return userService.findActiveUsers();
     }
-
+    @RequestMapping("/search")
+    public PageResult search(Integer page, Integer rows) {
+        PageResult result = userService.findPage(null, page, rows);
+        return result;
+    }
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status) {
+        try {
+            if (ids != null) {
+                for (Long id : ids) {
+                    userService.updateStatus(id, status);
+                }
+            }
+            return new Result(true, "状态修改成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "状态修改失败!");
+        }
+    }
 }
