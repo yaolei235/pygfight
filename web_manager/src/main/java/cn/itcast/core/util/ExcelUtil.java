@@ -3,6 +3,7 @@ package cn.itcast.core.util;
 
 
 import cn.itcast.core.pojo.good.Brand;
+import cn.itcast.core.pojo.template.TypeTemplate;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
@@ -11,6 +12,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -70,18 +72,10 @@ public class ExcelUtil {
     }
 
     //导人excel表
-    public static  List<Brand> readExcel(String fileName, List<String> title) throws Exception {
-        URL url = new URL(fileName);
-        InputStream is = url.openConnection().getInputStream();
-        Workbook hssfWorkbook = null;
-        if (fileName.endsWith("xlsx")) {
-            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
-        } else if (fileName.endsWith("xls")) {
-            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
-
-        }
+    public static  List<Brand> readExcelBrand(String fileName) throws Exception {
+        Workbook hssfWorkbook = getWorkbook(fileName);
         List<Brand> list = new ArrayList<>();
-        Brand brand = new Brand();
+
         // 循环工作表Sheet   从1开始,因为一般第一行都是列名
         for (int numSheet = 0; numSheet < hssfWorkbook.getNumberOfSheets(); numSheet++) {
 
@@ -92,10 +86,11 @@ public class ExcelUtil {
             }
             // 循环行Row
             for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
+                Brand brand = new Brand();
                 //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
                 Row hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
-
+                    //读取表格内容并赋值给pojo类
                     Cell id = hssfRow.getCell(0);
                     Cell name = hssfRow.getCell(1);
                     Cell first_char = hssfRow.getCell(2);
@@ -111,5 +106,62 @@ public class ExcelUtil {
 
             }
         return list;
+    }
+    //获取workbook类
+    private static Workbook getWorkbook(String fileName) throws IOException {
+        URL url = new URL(fileName);
+        InputStream is = url.openConnection().getInputStream();
+        Workbook hssfWorkbook = null;
+        if (fileName.endsWith("xlsx")) {
+            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
+        } else if (fileName.endsWith("xls")) {
+            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
+
+        }
+        return hssfWorkbook;
+    }
+
+    public static List<TypeTemplate> readExcelType(String fileName) throws Exception{
+        Workbook hssfWorkbook = getWorkbook(fileName);
+        List<TypeTemplate> list = new ArrayList<>();
+
+        // 循环工作表Sheet   从1开始,因为一般第一行都是列名
+        for (int numSheet = 0; numSheet < hssfWorkbook.getNumberOfSheets(); numSheet++) {
+
+            //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            Sheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            if (hssfSheet == null) {
+                continue;
+            }
+            // 循环行Row
+            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
+                TypeTemplate typeTemplate = new TypeTemplate();
+                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+                Row hssfRow = hssfSheet.getRow(rowNum);
+                if (hssfRow != null) {
+                    //读取表格内容并赋值给pojo类
+                    Cell id = hssfRow.getCell(0);
+                    Cell name = hssfRow.getCell(1);
+                    Cell spec_ids = hssfRow.getCell(2);
+                    Cell brand_ids = hssfRow.getCell(3);
+                    Cell custom_attribute_items = hssfRow.getCell(4);
+                    Cell status = hssfRow.getCell(5);
+
+                    typeTemplate.setId(Long.parseLong(id.toString().split("\\.")[0]));
+                    typeTemplate.setName(name.toString());
+                    typeTemplate.setSpecIds(spec_ids.toString());
+                    typeTemplate.setBrandIds(brand_ids.toString());
+                    typeTemplate.setCustomAttributeItems(custom_attribute_items.toString());
+                    typeTemplate.setStatus(status.toString().split("\\.")[0]);
+
+
+                    list.add(typeTemplate);
+                }
+            }
+
+        }
+        return list;
+
+
     }
 }
