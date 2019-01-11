@@ -26,6 +26,5 @@ public interface TemplateService {
     public PageResult search(TypeTemplate typeTemplate, Integer page, Integer rows);
 
 
-
-
+    void addTypeT(List<TypeTemplate> typeTemplates);
 }

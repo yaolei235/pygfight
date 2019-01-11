@@ -73,42 +73,6 @@ public class ExcelUtil {
 
     //导人excel表
     public static  List<Brand> readExcelBrand(String fileName) throws Exception {
-        Workbook hssfWorkbook = getWorkbook(fileName);
-        List<Brand> list = new ArrayList<>();
-
-        // 循环工作表Sheet   从1开始,因为一般第一行都是列名
-        for (int numSheet = 0; numSheet < hssfWorkbook.getNumberOfSheets(); numSheet++) {
-
-            //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
-            Sheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
-            if (hssfSheet == null) {
-                continue;
-            }
-            // 循环行Row
-            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
-                Brand brand = new Brand();
-                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
-                Row hssfRow = hssfSheet.getRow(rowNum);
-                if (hssfRow != null) {
-                    //读取表格内容并赋值给pojo类
-                    Cell id = hssfRow.getCell(0);
-                    Cell name = hssfRow.getCell(1);
-                    Cell first_char = hssfRow.getCell(2);
-                    Cell status = hssfRow.getCell(3);
-
-                    brand.setId(Long.parseLong(id.toString().split("\\.")[0]));
-                    brand.setName(name.toString());
-                    brand.setFirstChar(first_char.toString().substring(0,1));
-                    brand.setStatus(status.toString().split("\\.")[0]);
-                    list.add(brand);
-                }
-            }
-
-            }
-        return list;
-    }
-    //获取workbook类
-    private static Workbook getWorkbook(String fileName) throws IOException {
         URL url = new URL(fileName);
         InputStream is = url.openConnection().getInputStream();
         Workbook hssfWorkbook = null;
@@ -118,11 +82,50 @@ public class ExcelUtil {
             hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
 
         }
-        return hssfWorkbook;
+        List<Brand> list = new ArrayList<>();
+
+        // 循环工作表Sheet
+        assert hssfWorkbook != null;
+        for (int numSheet = 0; numSheet < hssfWorkbook.getNumberOfSheets(); numSheet++) {
+
+            //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            Sheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+
+            if (hssfSheet == null) {
+                continue;
+            }
+            // 循环行Row
+            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
+                Brand brand = new Brand();
+                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+                Row hssfRow = hssfSheet.getRow(rowNum);
+                //读取表格内容并赋值给pojo类
+                Cell id = hssfRow.getCell(0);
+                Cell name = hssfRow.getCell(1);
+                Cell first_char = hssfRow.getCell(2);
+                Cell status = hssfRow.getCell(3);
+                brand.setId(Long.parseLong(id.toString().split("\\.")[0]));
+                brand.setName(name.toString());
+                brand.setFirstChar(first_char.toString().substring(0,1));
+                brand.setStatus(status.toString().split("\\.")[0]);
+                list.add(brand);
+            }
+
+            }
+        return list;
     }
 
+
     public static List<TypeTemplate> readExcelType(String fileName) throws Exception{
-        Workbook hssfWorkbook = getWorkbook(fileName);
+        URL url = new URL(fileName);
+        InputStream is = url.openConnection().getInputStream();
+        Workbook hssfWorkbook = null;
+        if (fileName.endsWith("xlsx")) {
+            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
+        } else if (fileName.endsWith("xls")) {
+            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
+
+        }
         List<TypeTemplate> list = new ArrayList<>();
 
         // 循环工作表Sheet   从1开始,因为一般第一行都是列名

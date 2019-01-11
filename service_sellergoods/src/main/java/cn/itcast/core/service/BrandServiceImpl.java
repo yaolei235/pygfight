@@ -96,10 +96,6 @@ public class BrandServiceImpl implements BrandService {
         }
     }
 
-    @Override
-    public List<String> findTitle() {
-        return brandDao.findTitle(MysqlNameUtil.TABLE_BRAND, MysqlNameUtil.MYSQL_NAME);
-    }
 
     @Override
     public void addBrands(List<Brand> brands) {
@@ -107,15 +103,17 @@ public class BrandServiceImpl implements BrandService {
             return;
         }
         List<Brand> brandList = brandDao.selectByExample(null);
-        for (Brand brand : brands) {
+        for (int i = 0; i < brands.size(); i++) {
+            Brand brand = brands.get(i);
             for (Brand brand1 : brandList) {
-                if (brand.getId().equals(brand1.getId())){
-                    brandDao.updateByPrimaryKey(brand);
+                if (brand.equals(brand1)){
                     brands.remove(brand);
-                    return;
+                    break;
                 }
             }
         }
+        System.out.println(brands);
+
         if (brands.size()>0){
             for (Brand brand : brands) {
                 brandDao.insertSelective(brand);
