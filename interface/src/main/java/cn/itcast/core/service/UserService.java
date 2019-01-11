@@ -1,6 +1,8 @@
 package cn.itcast.core.service;
 
+import cn.itcast.core.pojo.entity.ActiveUsers;
 import cn.itcast.core.pojo.entity.PageResult;
+import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.user.User;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ public interface UserService {
 
     public  void  add(User user);
 
-    Map<String,Integer> findActiveUsers( );
+    ActiveUsers findActiveUsers( );
 
     List<ArrayList<String>> findAllUsers();
 
@@ -24,4 +26,9 @@ public interface UserService {
     PageResult findPage(User user, Integer page, Integer rows);
 
     void updateStatus(Long id, String status);
+
+    //登录加经验值
+    void creatExperienceValue(String userName);
+
+    List<Order> showUnPayOrders(String userName);
 }

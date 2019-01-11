@@ -10,9 +10,14 @@
 
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
+
+	<script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
+	<script type="text/javascript" src="js/base.js"></script>
+	<script type="text/javascript" src="js/controller/indexController.js"></script>
+
 </head>
 
-<body>
+<body  ng-app="pinyougou" ng-controller="indexController" ng-init="showUnPay()">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -142,7 +147,7 @@ $(function(){
 <script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
 <script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
 <script type="text/javascript" src="js/widget/nav.js"></script>
-</body>
+<!--</body>-->
     <!--header-->
     <div id="account">
         <div class="py-container">
@@ -202,7 +207,7 @@ $(function(){
                             </table>
                         </div>
 
-                        <div class="order-detail">
+                        <div class="order-detail" ng-repeat="order in list">
                             <div class="orders">
                                 <div class="choose-order">
                                     <label data-toggle="checkbox" class="checkbox-pretty checked">
@@ -220,31 +225,31 @@ $(function(){
 
                                 <div class="choose-title">
                                     <label data-toggle="checkbox" class="checkbox-pretty ">
-                                           <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
+                                           <input type="checkbox" checked="checked"><span>{{order.createTime}}　订单编号：{{order.orderId}}  店铺：{{order.sellerId}} <a>和我联系</a></span>
                                      </label>
                                     <a class="sui-btn btn-info share-btn">分享</a>
                                 </div>
                                 <table class="sui-table table-bordered order-datatable">
 
                                     <tbody>
-                                        <tr>
+                                        <tr ng-repeat="orderItem in order.orderItemList">
                                             <td width="35%">
                                                 <div class="typographic"><img src="img/goods.png" />
-                                                    <a href="#" class="block-text">包邮 正品玛姬儿压缩面膜无纺布纸膜100粒 送泡瓶面膜刷喷瓶 新款</a>
-                                                    <span class="guige">规格：温泉喷雾150ml</span>
+                                                    <a href="#" class="block-text">{{orderItem.title}}</a>
+                                                    <span class="guige">{{orderItem.title}}</span>
                                                 </div>
                                             </td>
                                             <td width="5%" class="center">
                                                 <ul class="unstyled">
-                                                    <li class="o-price">¥599.00</li>
-                                                    <li>¥299.00</li>
+                                                    <li class="o-price">{{orderItem.totalFee}}</li>
+                                                    <li>{{orderItem.totalFee}}</li>
                                                 </ul>
                                             </td>
                                             <td width="5%" class="center">1</td>
                                             <td width="8%" class="center"></td>
                                             <td width="10%" class="center">
                                                 <ul class="unstyled">
-                                                    <li>¥299.00</li>
+                                                    <li>{{orderItem.totalFee}}</li>
                                                     <li>（含运费：￥0.00）</li>
                                                 </ul>
                                             </td>
@@ -517,7 +522,7 @@ $(function(){
 	</div>
 </div>
 <!--页面底部END-->
-
+</body>
 undefined
 
 </html>

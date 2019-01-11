@@ -3,7 +3,7 @@ package cn.itcast.core.service;
 import cn.itcast.core.dao.user.UserDao;
 import cn.itcast.core.pojo.user.UserQuery;
 import com.alibaba.dubbo.config.annotation.Reference;
-import org.springframework.data.redis.core.RedisTemplate;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -22,51 +22,33 @@ import java.util.List;
  */
 public class UserDetailServiceImpl implements UserDetailsService {
 
-    /*@Reference
-    private UserDao userDao;*/
+
     @Reference
     private UserService userService;
 
-   /* public void setUserService(UserService userService) {
-        this.userService = userService;
-    }*/
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //定义权限集合
         List<GrantedAuthority> authList = new ArrayList<>();
+
         authList.add(new SimpleGrantedAuthority("ROLE_USER"));
         //用户登录时候,经验值加1
-        if (username!=null){
-            //UserQuery query = new UserQuery();
-            //UserQuery.Criteria criteria = query.createCriteria();
-            //criteria.andUsernameEqualTo(username);
 
-           /* //获取该用户民对应的用户(列表)
-        List<cn.itcast.core.pojo.user.User> userList = userDao.selectByExample(query);
 
-        for (cn.itcast.core.pojo.user.User user : userList) {
-            //经验值加1
-            user.setExperienceValue(user.getExperienceValue()+1);
-            //更新到数据库
-            userDao.updateByPrimaryKeySelective(user);
-        }*/
-    }
         //1. 如果获取的数据为空则证明用户名输入错误, 如果能获取到数据, 将用户名, 密码返回并且给这个用户赋予对应的访问权限
-        if (userService.findOne(username) != null) {
-            //判断用户权限状态
-            if ("1".equals(userService.findOne(username).getAuditstatus())) {
+        if (username!=null) {
 
-                return new User(username, userService.findOne(username).getPassword(), authList);
+            if (userService.findOne(username) != null) {
+                //判断用户权限状态
+                if ("1".equals(userService.findOne(username).getAuditstatus())) {
+                    //用户登录的话 增加经验值
+                    userService.creatExperienceValue(username);
+                    return new User(username, userService.findOne(username).getPassword(), authList);
+                }
             }
         }
-        /*//向权限集合中加入访问权限
+        return null;
 
-
-        return new User(username, "", authList);*/
-
-        List<GrantedAuthority> authList1 = new ArrayList<>();
-        authList1.add(new SimpleGrantedAuthority("ROLE_USERSS"));
-        return  new User(username,"",authList1);
     }
 }

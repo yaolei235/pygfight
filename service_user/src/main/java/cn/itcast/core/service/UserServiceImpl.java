@@ -29,6 +29,8 @@ import javax.jms.Session;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import cn.itcast.core.pojo.entity.ActiveUsers;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -213,9 +215,9 @@ public class UserServiceImpl implements UserService {
     }*/
 
     @Override
-    public Map<String, Integer> findActiveUsers( ) {
+    public ActiveUsers findActiveUsers() {
 
-        Map<String, Integer> map = new HashMap<>();
+        ActiveUsers activeUsers = new ActiveUsers();
         List<User> userList = userDao.selectByExample(null);
 
         //用户总数量
@@ -231,7 +233,7 @@ public class UserServiceImpl implements UserService {
             //获取每个用户的经验值
             Integer experienceValue = user.getExperienceValue();
 
-            if (experienceValue>2){
+            if (experienceValue!=null && experienceValue>2){
                 //活跃用户数量+1
                 activeCount ++;
             }else {
@@ -239,11 +241,12 @@ public class UserServiceImpl implements UserService {
                 unactiveCount++;
             }
         }
-        map.put("totalCount", size);
-        map.put("activeCount", activeCount);
-        map.put("unactiveCount",unactiveCount);
 
-        return map;
+        activeUsers.setAllUsers(size);
+        activeUsers.setActiveUsers(activeCount);
+        activeUsers.setUntiveUsers(unactiveCount);
+
+        return activeUsers;
     }
 
     @Override
@@ -253,6 +256,61 @@ public class UserServiceImpl implements UserService {
         user.setId(id);
         user.setAuditstatus(status);
         userDao.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public void creatExperienceValue(String userName) {
+        //用户登录时候,经验值加1
+
+        if (userName!=null){
+
+            UserQuery query = new UserQuery();
+            UserQuery.Criteria criteria = query.createCriteria();
+            criteria.andUsernameEqualTo(userName);
+
+            //获取该用户民对应的用户(列表)
+            List<cn.itcast.core.pojo.user.User> userList = userDao.selectByExample(query);
+
+            for (cn.itcast.core.pojo.user.User user : userList) {
+
+                if (user.getExperienceValue()==null){
+
+                    user.setExperienceValue(1);
+                }else {
+                    user.setExperienceValue(user.getExperienceValue()+1);
+                }
+                //更新到数据库
+                userDao.updateByPrimaryKeySelective(user);
+            }
+        }
+    }
+
+    //展示该用户未支付的订单
+    @Override
+    public List<Order> showUnPayOrders(String userName) {
+
+        //根据用户名查询该用户所有订单
+        OrderQuery query = new OrderQuery();
+        OrderQuery.Criteria criteria = query.createCriteria();
+        criteria.andUserIdEqualTo(userName);
+
+        List<Order> orderList = orderDao.selectByExample(query);
+
+        if (orderList!=null){
+            for (Order order : orderList) {
+                //每一个订单
+                OrderItemQuery orderItemQuery = new OrderItemQuery();
+                OrderItemQuery.Criteria criteria1 = orderItemQuery.createCriteria();
+                criteria1.andOrderIdEqualTo(order.getOrderId());
+
+                List<OrderItem> orderItemList = orderItemDao.selectByExample(orderItemQuery);
+
+                order.setOrderItemList(orderItemList);
+            }
+            return orderList;
+        }
+
+        return null;
     }
 
     @Override

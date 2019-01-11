@@ -1,6 +1,7 @@
 package cn.itcast.core.controller;
 
 
+import cn.itcast.core.pojo.entity.ActiveUsers;
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.user.User;
@@ -93,10 +94,12 @@ public class UserController {
 
 
     @RequestMapping("/findUsers")
-    public Map<String,Integer> findUsers(){
+    public ActiveUsers findUsers(){
 
         return userService.findActiveUsers();
     }
+
+
     @RequestMapping("/search")
     public PageResult search(Integer page, Integer rows) {
         PageResult result = userService.findPage(null, page, rows);

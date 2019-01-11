@@ -19,14 +19,13 @@
     
     <script type="text/javascript" src="./js/base.js"></script>
     <script type="text/javascript" src="./js/service/contentService.js"></script>
-	<script type="text/javascript" src="./js/service/indexService.js"></script>
-    <script type="text/javascript" src="./js/controller/contentController.js"></script>
-	<script type="text/javascript" src="./js/controller/indexController.js"></script>
+	<script type="text/javascript" src="./js/controller/contentController.js"></script>
+
 
    
 </head>
 
-<body ng-app="pinyougou" ng-controller="indexController" ng-init="findItemCatList()">
+<body ng-app="pinyougou" ng-controller="contentController" ng-init="findItemCatList();findByCategoryId(1)">
 <!-- 头部栏位 -->
 	<!--页面顶部-->
 <div id="nav-bottom">
@@ -540,20 +539,14 @@
 						<div class="yui3-u row-330 floorBanner">
 							<div id="floorCarousel" data-ride="carousel" data-interval="4000" class="sui-carousel slide">
 								<ol class="carousel-indicators">
-									<li data-target="#floorCarousel" data-slide-to="0" class="active"></li>
-									<li data-target="#floorCarousel" data-slide-to="1"></li>
-									<li data-target="#floorCarousel" data-slide-to="2"></li>
+                                    <li data-target="#myCarousel" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" ng-repeat="item in contentList[1]"></li>
 								</ol>
 								<div class="carousel-inner">
-									<div class="active item">
-										<img src="img/floor-1-b01.png">
-									</div>
-									<div class="item">
-										<img src="img/floor-1-b02.png">
-									</div>
-									<div class="item">
-										<img src="img/floor-1-b03.png">
-									</div>
+                                    <div class="{{$index==0?'active':''}} item" ng-repeat="item in contentList[1]">
+                                        <a href="{{item.url}}">
+                                            <img src="{{item.pic}}"  width="730" height="454"/>
+                                        </a>
+                                    </div>
 								</div>
 								<a href="#floorCarousel" data-slide="prev" class="carousel-control left">‹</a>
 								<a href="#floorCarousel" data-slide="next" class="carousel-control right">›</a>

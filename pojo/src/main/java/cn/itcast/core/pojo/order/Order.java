@@ -6,6 +6,22 @@ import java.util.Date;
 import java.util.List;
 
 public class Order implements Serializable {
+
+    private List<OrderItem> orderItemList;//订单明细
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public List<OrderItem> getOrderItemList() {
+
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
+    }
+
     /**
      * 订单id
      */

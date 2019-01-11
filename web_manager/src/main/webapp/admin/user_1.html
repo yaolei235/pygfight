@@ -50,19 +50,17 @@
         <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
             <thead>
             <tr>
-                <th class="sorting_asc">用户数量</th>
+                <th class="sorting">用户总数</th>
                 <th class="sorting">活跃用户</th>
-                <th class="sorting">非活跃用户</th>
+                <th class="text-center">非活跃用户</th>
             </tr>
             </thead>
             <tbody>
-
-            <tr ng-repeat="entity in list">
-                <td>{{entity}}</td>
-                <td>{{entity}}</td>
-                <td>{{entity}}</td>
+            <tr>
+                <td>{{list.allUsers}}</td>
+                <td>{{list.activeUsers}}</td>
+                <td>{{list.untiveUsers}}</td>
             </tr>
-
             </tbody>
         </table>
         <!--数据列表/-->
