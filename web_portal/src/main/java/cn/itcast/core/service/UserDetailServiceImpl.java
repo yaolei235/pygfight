@@ -1,5 +1,6 @@
 package cn.itcast.core.service;
 
+import cn.itcast.core.dao.user.UserDao;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +22,7 @@ import java.util.List;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Reference
-    private RedisTemplate redisTemplate;
+    private UserDao userDao;
 
 
     @Override
@@ -30,17 +31,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
         List<GrantedAuthority> authList = new ArrayList<>();
         //向权限集合中加入访问权限
         authList.add(new SimpleGrantedAuthority("ROLE_USER"));
-
-        //获取redis中指定用户的登录次数
-        Integer count =(Integer) redisTemplate.boundHashOps("logins").get(username);
-
-        if (count==null || count<0 ){
-            count = 0;
-        }
-
-        count++;
-
-        redisTemplate.boundHashOps("logins").put(username,count);
 
         return new User(username, "", authList);
     }

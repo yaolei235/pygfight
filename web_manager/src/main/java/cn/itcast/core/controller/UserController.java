@@ -9,6 +9,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -93,7 +94,7 @@ public class UserController {
     @RequestMapping("/findUsers")
     public Map<String,Integer> findUsers(){
 
-        return userService.findUsers();
+        return userService.findActiveUsers();
     }
 
 }

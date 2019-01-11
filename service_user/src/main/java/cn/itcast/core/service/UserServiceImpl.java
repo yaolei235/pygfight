@@ -209,25 +209,32 @@ public class UserServiceImpl implements UserService {
     }*/
 
     @Override
-    public Map<String, Integer> findUsers() {
+    public Map<String, Integer> findActiveUsers( ) {
+
         Map<String, Integer> map = new HashMap<>();
         List<User> userList = userDao.selectByExample(null);
+
         //用户总数量
         int size = userList.size();
 
         //活跃用户数量
-        int activeCount;
+        int activeCount=0;
+
         //非活跃用户数量
-        int unactiveCount;
+        int unactiveCount=0;
 
-        Map entries = redisTemplate.boundHashOps("logins").entries();
-        for (Object o : entries.keySet()) {
-
+        for (User user : userList) {
+            Integer experienceValue = user.getExperienceValue();
+            if (experienceValue>2 && experienceValue!=null){
+                activeCount ++;
+            }else {
+                unactiveCount++;
+            }
         }
 
         map.put("totalCount", size);
-        map.put("active", 5);
-        map.put("unactive",12 );
+        map.put("activeCount", activeCount);
+        map.put("unactiveCount",unactiveCount);
 
         return map;
     }
