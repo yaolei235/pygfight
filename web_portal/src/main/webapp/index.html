@@ -25,7 +25,7 @@
    
 </head>
 
-<body ng-app="pinyougou" ng-controller="contentController" ng-init="findItemCatList();findByCategoryId(1)">
+<body ng-app="pinyougou" ng-controller="contentController" ng-init="findItemCatList();findByCategoryId(1);findByCategoryId1(6);findByCategoryId2(7)">
 <!-- 头部栏位 -->
 	<!--页面顶部-->
 <div id="nav-bottom">
@@ -539,17 +539,20 @@
 						<div class="yui3-u row-330 floorBanner">
 							<div id="floorCarousel" data-ride="carousel" data-interval="4000" class="sui-carousel slide">
 								<ol class="carousel-indicators">
-                                    <li data-target="#myCarousel" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" ng-repeat="item in contentList[1]"></li>
+                                    <li data-target="#myCarousel" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" ng-repeat="item in contentList1[6]"></li>
 								</ol>
 								<div class="carousel-inner">
-                                    <div class="{{$index==0?'active':''}} item" ng-repeat="item in contentList[1]">
-                                        <a href="{{item.url}}">
-                                            <img src="{{item.pic}}"  width="730" height="454"/>
+                                    <div class="{{$index==0?'active':''}} item" ng-repeat="item1 in contentList1[6]">
+                                        <a href="{{item1.url}}">
+                                            <img src="{{item1.pic}}"  width="250" height="260"/>
                                         </a>
                                     </div>
 								</div>
 								<a href="#floorCarousel" data-slide="prev" class="carousel-control left">‹</a>
 								<a href="#floorCarousel" data-slide="next" class="carousel-control right">›</a>
+
+								<!--<a href="#floorCarousel" data-slide="prev" class="carousel-control left">‹</a>
+								<a href="#floorCarousel" data-slide="next" class="carousel-control right">›</a>-->
 							</div>
 						</div>
 						<div class="yui3-u row-220 split">
@@ -648,14 +651,10 @@
 									<li data-target="#floorCarousell" data-slide-to="2"></li>
 								</ol>
 								<div class="carousel-inner">
-									<div class="active item">
-										<img src="img/floor-1-b01.png">
-									</div>
-									<div class="item">
-										<img src="img/floor-1-b02.png">
-									</div>
-									<div class="item">
-										<img src="img/floor-1-b03.png">
+									<div class="{{$index==0?'active':''}} item" ng-repeat="item2 in contentList2[7]">
+										<a href="{{item2.url}}">
+											<img src="{{item2.pic}}"  width="250" height="260"/>
+										</a>
 									</div>
 								</div>
 								<a href="#floorCarousell" data-slide="prev" class="carousel-control left">‹</a>

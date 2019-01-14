@@ -102,7 +102,7 @@ public class UserController {
 
     @RequestMapping("/search")
     public PageResult search(Integer page, Integer rows) {
-        PageResult result = userService.findPage(null, page, rows);
+         PageResult result = userService.findPage(null, page, rows);
         return result;
     }
     @RequestMapping("/updateStatus")

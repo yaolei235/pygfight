@@ -43,4 +43,16 @@ public class ContentController {
         return itemCatList;
     }
 
+    @RequestMapping("/findByCategoryId1")
+    public List<Content> findByCategoryId1(Long categoryId) {
+        return contentService.findByCategoryIdFromRedis(categoryId);
+    }
+
+    @RequestMapping("/findByCategoryId2")
+    public List<Content> findByCategoryId2(Long categoryId) {
+        return contentService.findByCategoryIdFromRedis(categoryId);
+    }
+
+
+
 }
